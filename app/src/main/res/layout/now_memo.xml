@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/nowMemoRoot"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:isScrollContainer="true"
+              android:orientation="vertical"
+              android:padding="10dp"
+              android:background="@drawable/bg">
+
+    <EditText
+        android:id="@+id/editText1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.8"
+        android:maxLines="999"
+        android:minLines="999"
+        android:textSize="24dp">
+    </EditText>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.2">
+
+        <Button
+            android:id="@+id/btnSave"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="저장하기"/>
+
+        <Button
+            android:id="@+id/btnSaveAndFin"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="저장 및 종료하기"/>
+
+    </LinearLayout>
+</LinearLayout>
