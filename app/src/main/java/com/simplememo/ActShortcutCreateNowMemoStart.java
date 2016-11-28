@@ -13,7 +13,7 @@ public class ActShortcutCreateNowMemoStart extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		ShortcutCreate.createShortcut(this, "com.simplememo.ActNowMemoStart", "NowMemo", R.drawable.ic_launcher);
+		ShortcutCreate.createShortcut(this, "com.simplememo.ActNowMemoStart", getResources().getString(R.string.now_memo), R.drawable.notepad_icon);
 		finish();
 	}
 }

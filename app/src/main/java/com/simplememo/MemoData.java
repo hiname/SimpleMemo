@@ -34,6 +34,11 @@ public class MemoData {
 	String saveFileFullPath = saveDir + "/" + saveFileName;
 
 	public void load() {
+		File file = new File(saveFileFullPath);
+		if (!file.exists()) {
+			new File(saveDir).mkdirs();
+			FileMgr.saveFileText(saveFileFullPath, "메모 입력", FileMgr.ENC_UTF8, false);
+		}
 		clear();
 		// String dataPack = spf.getString(dataPackKey, "");
 		String dataPack = "";
@@ -44,10 +49,6 @@ public class MemoData {
 			dataPack = dataPack.substring(0, dataPack.length() - 2);
 
 		Log.d("d", "load_dataPack : " + dataPack);
-		if (dataPack.equals("")) {
-			dataPack = "메모 입력";
-			Log.d("d", "dataPack 비어있음");
-		}
 		String dataList[] = dataPack.split(memoSpliter);
 		for (String data : dataList) add(data);
 	}
