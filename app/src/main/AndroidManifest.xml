@@ -17,7 +17,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".ActMain"
-            android:excludeFromRecents="true"
+            android:excludeFromRecents="false"
             android:label="@string/app_name"
             android:noHistory="true">
             <intent-filter>
@@ -25,13 +25,14 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".ActMemoView"/>
-        <activity android:name=".ActNowMemo"/>
+        <activity
+            android:name=".ActNowMemo"
+            android:exported="true"/>
         <activity
             android:name=".ActMemoList"
             android:exported="true"/>
         <activity
-            android:name=".ActNowMemoStart"
+            android:name=".ActAddNowMemoStart"
             android:excludeFromRecents="true"
             android:exported="true"
             android:label="NowMemoStart"
@@ -57,5 +58,7 @@
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
+
+        <service android:name=".Svc" />
     </application>
 </manifest>

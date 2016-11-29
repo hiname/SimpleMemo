@@ -3,18 +3,18 @@
               android:id="@+id/nowMemoRoot"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
+              android:background="@drawable/bg"
               android:isScrollContainer="true"
               android:orientation="vertical"
-              android:padding="10dp"
-              android:background="@drawable/bg">
+              android:padding="10dp">
 
     <EditText
         android:id="@+id/editText1"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.8"
-        android:maxLines="999"
-        android:minLines="999"
+        android:scrollHorizontally="false"
+        android:singleLine="false"
         android:textSize="24dp">
     </EditText>
 
@@ -36,6 +36,5 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="저장 및 종료하기"/>
-
     </LinearLayout>
 </LinearLayout>

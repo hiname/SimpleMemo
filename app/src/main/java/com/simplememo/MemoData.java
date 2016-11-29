@@ -33,6 +33,12 @@ public class MemoData {
 	String saveFileName = "save.txt";
 	String saveFileFullPath = saveDir + "/" + saveFileName;
 
+	ListUpdate listUpdate;
+
+	public void setListUpdate(ListUpdate listUpdate) {
+		this.listUpdate = listUpdate;
+	}
+
 	public void load() {
 		File file = new File(saveFileFullPath);
 		if (!file.exists()) {
@@ -46,7 +52,7 @@ public class MemoData {
 		for(String loadLine : loadLineList)
 			dataPack += loadLine + "\n";
 		if (dataPack.length() > 2)
-			dataPack = dataPack.substring(0, dataPack.length() - 2);
+			dataPack = dataPack.substring(0, dataPack.length() - 1);
 
 		Log.d("d", "load_dataPack : " + dataPack);
 		String dataList[] = dataPack.split(memoSpliter);
@@ -158,8 +164,9 @@ public class MemoData {
 		arrayList.clear();
 	}
 
-	public String getNowSelectData() {
-		if (nowSelect == -1 || getSize() <= 0)
+	public String getNowSelectMemo() {
+		int size = getSize();
+		if (nowSelect == -1 || size == 0 || size <= nowSelect)
 			return null;
 		return arrayList.get(nowSelect);
 	}

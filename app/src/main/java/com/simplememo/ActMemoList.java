@@ -5,14 +5,13 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
 
-public class ActMemoList extends Activity {
+public class ActMemoList extends Activity implements ListUpdate{
 	MemoData memoData = MemoData.getInstance();
 	ListView listView1;
 	ArrayAdapter arrayAdapter;
@@ -24,12 +23,13 @@ public class ActMemoList extends Activity {
 		memoData.setContext(this);
 		setContentView(R.layout.memo_list);
 		listView1 = (ListView) findViewById(R.id.listView1);
-		reloadList();
 		listView1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				memoData.setNowSelect(position);
-				startActivity(new Intent(ActMemoList.this, ActMemoView.class));
+				memoData.setNowMode(MemoData.MODE_EDIT);
+				startActivityForResult(new Intent(ActMemoList.this, ActNowMemo.class), 0);
+				// startActivity(new Intent(ActMemoList.this, ActMemoView.class));
 			}
 		});
 
@@ -62,22 +62,26 @@ public class ActMemoList extends Activity {
 			}
 		});
 
-
-
-
-		// 선택 삭제
-		// 순서 변경
-
 		findViewById(R.id.btnAddMemo).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				startActivity(new Intent(ActMemoList.this, ActNowMemoStart.class));
+				startActivity(new Intent(ActMemoList.this, ActAddNowMemoStart.class));
 			}
 		});
 
+		reloadList();
+
 	}
 
-	private void reloadList() {
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		Log.d("d", "onActivityResult");
+		reloadList();
+	}
+
+	@Override
+	public void reloadList() {
 		String[] memoTitles = memoData.getTitles();
 		if (memoTitles == null)
 			memoTitles = new String[0];
@@ -87,8 +91,8 @@ public class ActMemoList extends Activity {
 	}
 
 	@Override
-	protected void onStart() {
-		super.onStart();
+	protected void onResume() {
+		super.onResume();
 		reloadList();
 	}
 

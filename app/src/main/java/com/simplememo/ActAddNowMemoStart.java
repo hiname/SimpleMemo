@@ -15,11 +15,13 @@ import android.widget.Toast;
 /**
  * Created by USER on 2016-11-28.
  */
-public class ActNowMemoStart extends Activity {
+public class ActAddNowMemoStart extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		MemoData.getInstance().setNowMode(MemoData.MODE_MEMO_ADD);
+		MemoData memoData = MemoData.getInstance();
+		memoData.setNowMode(MemoData.MODE_MEMO_ADD);
+		memoData.setNowSelect(memoData.getSize());
 		startActivity(new Intent(this, ActNowMemo.class));
 		finish();
 	}
