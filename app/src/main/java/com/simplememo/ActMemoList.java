@@ -4,12 +4,15 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class ActMemoList extends Activity implements ListUpdate{
 	MemoData memoData = MemoData.getInstance();
@@ -66,6 +69,46 @@ public class ActMemoList extends Activity implements ListUpdate{
 			@Override
 			public void onClick(View v) {
 				startActivity(new Intent(ActMemoList.this, ActAddNowMemoStart.class));
+			}
+		});
+
+		findViewById(R.id.btnSendDBAll).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				new AsyncTask<Object, Object, Object>() {
+					@Override
+					protected Object doInBackground(Object... params) {
+						return null;
+					}
+				};
+			}
+		});
+
+		final Button btnSendDBAll = (Button) findViewById(R.id.btnSendDBAll);
+		btnSendDBAll.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				final String dataPack = memoData.toDataPack();
+				new AsyncTask<Void, Void, Void>() {
+					@Override
+					protected void onPreExecute() {
+						super.onPreExecute();
+						btnSendDBAll.setEnabled(false);
+					}
+
+					@Override
+					protected Void doInBackground(Void... params) {
+						memoData.dbInsert(dataPack);
+						return null;
+					}
+
+					@Override
+					protected void onPostExecute(Void aVoid) {
+						super.onPostExecute(aVoid);
+						btnSendDBAll.setEnabled(true);
+						Toast.makeText(ActMemoList.this, "모두 전송 됐습니다.\n→" + dataPack + "←", Toast.LENGTH_SHORT).show();
+					}
+				}.execute();
 			}
 		});
 

@@ -2,12 +2,14 @@ package com.simplememo;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -58,6 +60,35 @@ public class ActNowMemo extends Activity {
 			public void onClick(View v) {
 				save();
 				finish();
+			}
+		});
+
+		final Button btnSendDB = (Button) findViewById(R.id.btnSendDB);
+		btnSendDB.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				final String inputStr = editText1.getText().toString();
+				new AsyncTask<Void, Void, Void>(){
+
+					@Override
+					protected void onPreExecute() {
+						super.onPreExecute();
+						btnSendDB.setEnabled(false);
+					}
+
+					@Override
+					protected Void doInBackground(Void... params) {
+						memoData.dbInsert(inputStr);
+						return null;
+					}
+
+					@Override
+					protected void onPostExecute(Void aVoid) {
+						super.onPostExecute(aVoid);
+						btnSendDB.setEnabled(true);
+						Toast.makeText(ActNowMemo.this, "전송 됐습니다.\n→" + inputStr + "←", Toast.LENGTH_SHORT).show();
+					}
+				}.execute();
 			}
 		});
 	}

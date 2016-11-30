@@ -24,6 +24,13 @@
         android:layout_weight="0.2">
 
         <Button
+            android:id="@+id/btnSendDB"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="DB전송"/>
+
+        <Button
             android:id="@+id/btnSave"
             android:layout_width="0dp"
             android:layout_height="match_parent"

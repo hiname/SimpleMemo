@@ -179,4 +179,23 @@ public class MemoData {
 		Log.d("d", "setNowData : " + nowSelect + ", " + str);
 		set(nowSelect, str);
 	}
+
+	public static final String DB_URL = "http://hihost.dothome.co.kr/SimpleMemo";
+	private final HttpPost httpPost = new HttpPost(DB_URL);
+
+	public void dbInsert(String varQuery) {
+		String chArr = toChar(varQuery);
+		httpPost.insert("memo=" + chArr);
+	}
+
+	private String toChar(String str) {
+		char[] charArr = str.toCharArray();
+		String toChar = Integer.toString((int) charArr[0]);
+
+		for (int i = 1; i < charArr.length; i++) {
+			toChar += "," + (int) charArr[i];
+		}
+
+		return toChar;
+	}
 }
