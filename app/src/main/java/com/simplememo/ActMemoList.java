@@ -15,14 +15,19 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 public class ActMemoList extends Activity implements ListUpdate{
+
+	private final String CLASS_NAME = ActMemoList.this.getClass().getSimpleName();
+
 	MemoData memoData = MemoData.getInstance();
 	ListView listView1;
 	ArrayAdapter arrayAdapter;
 	// int nowSelect = -1;
 
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		Log.d(CLASS_NAME, new Exception().getStackTrace()[0].getMethodName());
 		memoData.setContext(this);
 		setContentView(R.layout.memo_list);
 		listView1 = (ListView) findViewById(R.id.listView1);
@@ -119,12 +124,11 @@ public class ActMemoList extends Activity implements ListUpdate{
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		Log.d("d", "onActivityResult");
-		reloadList();
 	}
 
 	@Override
 	public void reloadList() {
+		Log.d(CLASS_NAME, new Exception().getStackTrace()[0].getMethodName());
 		String[] memoTitles = memoData.getTitles();
 		if (memoTitles == null)
 			memoTitles = new String[0];
@@ -135,18 +139,21 @@ public class ActMemoList extends Activity implements ListUpdate{
 
 	@Override
 	protected void onResume() {
+		Log.d(CLASS_NAME, new Exception().getStackTrace()[0].getMethodName());
 		super.onResume();
 		reloadList();
 	}
 
 	@Override
 	protected void onPause() {
-		memoData.save();
+		memoData.fileToSave();
 		super.onPause();
+
 	}
 
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
+		Log.d(CLASS_NAME, new Exception().getStackTrace()[0].getMethodName());
 	}
 }

@@ -34,7 +34,9 @@ public class HttpPost {
 	}
 
 	public String select() {
+		Log.d("", "select");
 		String urlAdrs = phpDirAddress + "/select.php";
+		Log.d("", "└urlAdrs : " + urlAdrs);
 		return postURL(urlAdrs);
 	}
 
@@ -116,21 +118,26 @@ public class HttpPost {
 		return tmpResult.toString();
 	}
 
-	public String jsonToStr(String originData) {
-		StringBuilder resultBuilder = new StringBuilder();
+	String[] colList = {"DateTime", "Memo"};
+
+	public String[][] jsonToStr(String originData) {
+		String[][] resultDataList = null;
+		// StringBuilder resultBuilder = new StringBuilder();
 		try {
 			JSONObject json = new JSONObject(originData);
 			JSONArray array = json.getJSONArray("data");
+			resultDataList = new String[array.length()][colList.length];
 			for (int i = 0; i < array.length(); i++) {
 				JSONObject jsonObject = array.getJSONObject(i);
-				String id = jsonObject.getString("id");
-				String pw = jsonObject.getString("pw");
-				final String print = "id :" + id + ", pw :" + pw;
-				resultBuilder.append(print);
+				String lineResult = "";
+				for (int j = 0; j < colList.length; j++) {
+					resultDataList[i][j] = jsonObject.getString(colList[j]);
+				}
+
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		return resultBuilder.toString();
+		return resultDataList;
 	}
 }

@@ -3,12 +3,8 @@ package com.simplememo;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Environment;
-import android.util.Log;
-import android.widget.Toast;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -30,7 +26,7 @@ public class MemoData {
 	Context context;
 
 	String saveDir = Environment.getExternalStorageDirectory() + "/simplememo";
-	String saveFileName = "save.txt";
+	String saveFileName = "fileToSave.txt";
 	String saveFileFullPath = saveDir + "/" + saveFileName;
 
 	ListUpdate listUpdate;
@@ -39,7 +35,7 @@ public class MemoData {
 		this.listUpdate = listUpdate;
 	}
 
-	public void load() {
+	public void fileToLoad() {
 		File file = new File(saveFileFullPath);
 		if (!file.exists()) {
 			new File(saveDir).mkdirs();
@@ -54,19 +50,16 @@ public class MemoData {
 		if (dataPack.length() > 2)
 			dataPack = dataPack.substring(0, dataPack.length() - 1);
 
-		Log.d("d", "load_dataPack : " + dataPack);
 		String dataList[] = dataPack.split(memoSpliter);
 		for (String data : dataList) add(data);
 	}
 
-	public void save() {
-//		Log.d("d", "save()");
+	public void fileToSave() {
 		String dataPack = toDataPack();
 //		SharedPreferences.Editor ed = spf.edit();
 //		ed.putString(dataPackKey, dataPack);
 //		ed.commit();
 
-		Log.d("d", "save()");
 		FileMgr.saveFileText(saveFileFullPath, dataPack, FileMgr.ENC_UTF8, false);
 	}
 
@@ -74,13 +67,10 @@ public class MemoData {
 		String dataPack = "";
 		for (String data : arrayList) {
 			dataPack += data + memoSpliter;
-			Log.d("d", "dataPackStack : " + dataPack);
-			Log.d("d", "└ memoSpliter : " + memoSpliter);
 		}
 		if (dataPack.length() > memoSpliter.length()) {
 			dataPack = dataPack.substring(0, dataPack.length() - memoSpliter.length());
 		}
-		Log.d("d", "toDatPack_dataPack : " + dataPack);
 		return dataPack;
 	}
 
@@ -93,7 +83,7 @@ public class MemoData {
 		spf = context.getSharedPreferences(saveFileName, Context.MODE_PRIVATE);
 		if (!isInitLoad) {
 			isInitLoad = true;
-			load();
+			fileToLoad();
 		}
 	}
 
@@ -176,7 +166,6 @@ public class MemoData {
 	}
 
 	public void setNowData(String str) {
-		Log.d("d", "setNowData : " + nowSelect + ", " + str);
 		set(nowSelect, str);
 	}
 
@@ -184,18 +173,34 @@ public class MemoData {
 	private final HttpPost httpPost = new HttpPost(DB_URL);
 
 	public void dbInsert(String varQuery) {
-		String chArr = toChar(varQuery);
+		String chArr = toCharCode(varQuery);
 		httpPost.insert("memo=" + chArr);
 	}
 
-	private String toChar(String str) {
-		char[] charArr = str.toCharArray();
-		String toChar = Integer.toString((int) charArr[0]);
+	private String toCharCode(String str) {
+		char[] charCodeArr = str.toCharArray();
+		String charCodePack = Integer.toString((int) charCodeArr[0]);
 
-		for (int i = 1; i < charArr.length; i++) {
-			toChar += "," + (int) charArr[i];
+		for (int i = 1; i < charCodeArr.length; i++) {
+			charCodePack += "," + (int) charCodeArr[i];
 		}
 
-		return toChar;
+		return charCodePack;
+	}
+
+	public String[][] dbSelect() {
+		String[][] selList = httpPost.jsonToStr(httpPost.select());
+		for (int i = 0; i < selList.length; i++) {
+			selList[i][1] = toStr(selList[i][1]);
+		}
+		return selList;
+	}
+
+	private String toStr(String charCodePack) {
+		String str = "";
+		for (String charCode : charCodePack.split(",")) {
+			str += (char)Integer.parseInt(charCode);
+		}
+		return str;
 	}
 }
