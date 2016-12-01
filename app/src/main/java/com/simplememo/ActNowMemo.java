@@ -10,11 +10,13 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class ActNowMemo extends Activity {
 	private EditText editText1;
 	private MemoData memoData = MemoData.getInstance();
+	private TextView tvCreateDateTime, tvModifyDateTime;
 
 	@Override
 	protected void onNewIntent(Intent intent) {
@@ -26,10 +28,14 @@ public class ActNowMemo extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.now_memo);
 		editText1 = (EditText) findViewById(R.id.editText1);
+		tvCreateDateTime = (TextView) findViewById(R.id.tvCreateDateTime);
+		tvModifyDateTime = (TextView) findViewById(R.id.tvModifyDateTime);
 		// editText1.setSingleLine(false);
 		if (memoData.getNowMode().equals(MemoData.MODE_EDIT)) {
 			editText1.setText(memoData.getNowSelectMemo());
 			// editText1.setFocusable(true);
+			tvCreateDateTime.setText("만든시간 : " + memoData.getNowSelectCreateDateTime());
+			tvModifyDateTime.setText("수정시간 : " + memoData.getNowSelectModifyDateTime());
 			final int getInptType = editText1.getInputType();
 			editText1.setVisibility(View.INVISIBLE);
 			editText1.setInputType(InputType.TYPE_NULL);
@@ -100,7 +106,7 @@ public class ActNowMemo extends Activity {
 		String mode = memoData.getNowMode();
 		if (mode.equals(MemoData.MODE_MEMO_ADD)) {
 			memoData.setNowSelect(memoData.getSize());
-			memoData.add("");
+			memoData.addBlank();
 			memoData.setNowMode(MemoData.MODE_MEMO_ADD_EDIT);
 		}
 		String srcStr = memoData.getNowSelectMemo();

@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 public class ActMemoList extends Activity implements ListUpdate{
 
-	private final String CLASS_NAME = ActMemoList.this.getClass().getSimpleName();
+	private final String TAG_CLASS_NAME = ActMemoList.this.getClass().getSimpleName();
 
 	MemoData memoData = MemoData.getInstance();
 	ListView listView1;
@@ -27,7 +27,7 @@ public class ActMemoList extends Activity implements ListUpdate{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Log.d(CLASS_NAME, new Exception().getStackTrace()[0].getMethodName());
+		Log.d(TAG_CLASS_NAME, new Exception().getStackTrace()[0].getMethodName());
 		memoData.setContext(this);
 		setContentView(R.layout.memo_list);
 		listView1 = (ListView) findViewById(R.id.listView1);
@@ -45,8 +45,8 @@ public class ActMemoList extends Activity implements ListUpdate{
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 				final int selPos = position;
-				AlertDialog.Builder alert_confirm = new AlertDialog.Builder(ActMemoList.this);
-				alert_confirm
+				AlertDialog.Builder builder = new AlertDialog.Builder(ActMemoList.this);
+				builder
 						.setMessage("삭제 하시겠습니까?\n→ " + arrayAdapter.getItem(selPos) + " ←")
 						.setCancelable(false)
 						.setPositiveButton("삭제함",
@@ -64,7 +64,9 @@ public class ActMemoList extends Activity implements ListUpdate{
 										return;
 									}
 								});
-				final AlertDialog alert = alert_confirm.create();
+				builder.setCancelable(true);
+				final AlertDialog alert = builder.create();
+
 				alert.show();
 				return false;
 			}
@@ -128,7 +130,7 @@ public class ActMemoList extends Activity implements ListUpdate{
 
 	@Override
 	public void reloadList() {
-		Log.d(CLASS_NAME, new Exception().getStackTrace()[0].getMethodName());
+		Log.d(TAG_CLASS_NAME, new Exception().getStackTrace()[0].getMethodName());
 		String[] memoTitles = memoData.getTitles();
 		if (memoTitles == null)
 			memoTitles = new String[0];
@@ -139,7 +141,7 @@ public class ActMemoList extends Activity implements ListUpdate{
 
 	@Override
 	protected void onResume() {
-		Log.d(CLASS_NAME, new Exception().getStackTrace()[0].getMethodName());
+		Log.d(TAG_CLASS_NAME, new Exception().getStackTrace()[0].getMethodName());
 		super.onResume();
 		reloadList();
 	}
@@ -148,12 +150,11 @@ public class ActMemoList extends Activity implements ListUpdate{
 	protected void onPause() {
 		memoData.fileToSave();
 		super.onPause();
-
 	}
 
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		Log.d(CLASS_NAME, new Exception().getStackTrace()[0].getMethodName());
+		Log.d(TAG_CLASS_NAME, new Exception().getStackTrace()[0].getMethodName());
 	}
 }

@@ -3,9 +3,12 @@ package com.simplememo;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Environment;
+import android.util.Log;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by USER on 2016-11-28.
@@ -111,8 +114,27 @@ public class MemoData {
 		return nowSelect;
 	}
 
-	public void add(String str) {
-		arrayList.add(str);
+	String dateTimeFormatPattern = "yy-MM-dd HH:mm:ss";
+	SimpleDateFormat dateTimeFormat = new SimpleDateFormat(dateTimeFormatPattern);
+
+	public void addBlank() {
+		add("blank");
+	}
+
+	public static final String TAG_CREATE_DATE_TIME = "#create#";
+	public static final String TAG_MODIFY_DATE_TIME = "#modify#";
+
+	public void add(String inputStr) {
+		Log.d("d", "add str : " + inputStr);
+		Log.d("d", "!str.contains(TAG_CREATE_DATE_TIME) : " + !inputStr.contains(TAG_CREATE_DATE_TIME));
+		String memoInfo = "";
+		if (!inputStr.contains(TAG_CREATE_DATE_TIME)) {
+			String dateTimeStr = dateTimeFormat.format(new Date());
+			memoInfo = TAG_CREATE_DATE_TIME + dateTimeStr + TAG_CREATE_DATE_TIME;
+			memoInfo += getModifyDateTime();
+		}
+
+		arrayList.add(inputStr + TAG_MEMO_END + memoInfo);
 	}
 
 	public int getSize() {
@@ -123,12 +145,29 @@ public class MemoData {
 		arrayList.remove(idx);
 	}
 
+	public static final String TAG_MEMO_END = "#memoEnd#";
+
 	public void set(int idx, String str) {
-		arrayList.set(idx, str);
+		String getInfoData = get(idx).split(TAG_MEMO_END)[1];
+		String modify = TAG_MODIFY_DATE_TIME + StringMgr.extTagData(getInfoData, TAG_MODIFY_DATE_TIME) + TAG_MODIFY_DATE_TIME;
+		getInfoData = getInfoData.replace(modify, getModifyDateTime());
+		arrayList.set(idx, str + TAG_MEMO_END + getInfoData);
+	}
+
+	public String getModifyDateTime() {
+		return TAG_MODIFY_DATE_TIME + dateTimeFormat.format(new Date()) + TAG_MODIFY_DATE_TIME;
 	}
 
 	public String get(int idx) {
 		return arrayList.get(idx);
+	}
+
+	public String getMemo(int idx) {
+		return arrayList.get(idx).split(TAG_MEMO_END)[0];
+	}
+
+	public String getInfo(int idx) {
+		return arrayList.get(idx).split(TAG_MEMO_END)[1];
 	}
 
 	int titleLen = 15;
@@ -138,7 +177,7 @@ public class MemoData {
 		if (size <= 0) return null;
 		String[] titles = new String[size];
 		for (int i = 0; i < size; i++) {
-			String nowMemo = arrayList.get(i);
+			String nowMemo = getMemo(i);
 			if (nowMemo.length() > 2 && nowMemo.contains("\n")) {
 				nowMemo = nowMemo.split("\n")[0] + "...";
 			}
@@ -158,7 +197,33 @@ public class MemoData {
 		int size = getSize();
 		if (nowSelect == -1 || size == 0 || size <= nowSelect)
 			return null;
-		return arrayList.get(nowSelect);
+		return getMemo(nowSelect);
+	}
+
+	public String getNowSelectCreateDateTime() {
+		int size = getSize();
+		if (nowSelect == -1 || size == 0 || size <= nowSelect)
+			return null;
+
+		return getCreateDateTime(nowSelect);
+	}
+
+	public String getNowSelectModifyDateTime() {
+		int size = getSize();
+		if (nowSelect == -1 || size == 0 || size <= nowSelect)
+			return null;
+
+		return getModifyDateTime(nowSelect);
+	}
+
+	public String getCreateDateTime(int idx) {
+		String info = getInfo(idx);
+		return StringMgr.extTagData(info, TAG_CREATE_DATE_TIME);
+	}
+
+	public String getModifyDateTime(int idx) {
+		String info = getInfo(idx);
+		return StringMgr.extTagData(info, TAG_MODIFY_DATE_TIME);
 	}
 
 	public void setNowSelect(int idx) {
@@ -188,12 +253,25 @@ public class MemoData {
 		return charCodePack;
 	}
 
-	public String[][] dbSelect() {
-		String[][] selList = httpPost.jsonToStr(httpPost.select());
-		for (int i = 0; i < selList.length; i++) {
-			selList[i][1] = toStr(selList[i][1]);
+	public String dbSelectOrigin() {
+		return httpPost.selectAllOrigin();
+	}
+
+	public String[] dbGetColNameList() {
+		String colNameJson = httpPost.getColNameList();
+		return httpPost.colNameJsonToArray(colNameJson);
+	}
+
+	public String[][] dbSelectAllArray() {
+		return httpPost.selectAllJsonToArray(httpPost.selectAllOrigin());
+	}
+
+	public String[][] dbSelectAllArrayCharToStr() {
+		String[][] array = httpPost.selectAllJsonToArray(httpPost.selectAllOrigin());
+		for (int i = 0; i < array.length; i++) {
+			array[i][2] = toStr(array[i][2]);
 		}
-		return selList;
+		return array;
 	}
 
 	private String toStr(String charCodePack) {

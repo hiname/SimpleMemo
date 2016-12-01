@@ -23,6 +23,8 @@ public class HttpPost {
 
 	public HttpPost(String phpDirAddress) {
 		this.phpDirAddress = phpDirAddress;
+		String colNameJson = getColNameList();
+		colList = colNameJsonToArray(colNameJson);
 	}
 
 	public void insert(String varQuery) {
@@ -33,12 +35,39 @@ public class HttpPost {
 		Log.d("d", "postResult : " + postResult);
 	}
 
-	public String select() {
-		Log.d("", "select");
-		String urlAdrs = phpDirAddress + "/select.php";
+	public String selectAllOrigin() {
+		Log.d("", "selectAllOrigin");
+		String urlAdrs = phpDirAddress + "/selectAll.php";
 		Log.d("", "└urlAdrs : " + urlAdrs);
 		return postURL(urlAdrs);
 	}
+
+	public String getColNameList() {
+		Log.d("", "getColNameList");
+		String urlAdrs = phpDirAddress + "/getColNameList.php";
+		Log.d("", "└urlAdrs : " + urlAdrs);
+		return postURL(urlAdrs);
+	}
+
+	public String[] colNameJsonToArray(String colNameJson) {
+
+		String[] colNameList = null;
+		try {
+			JSONObject jsOriginObj = new JSONObject(colNameJson);
+			JSONArray jsArray = jsOriginObj.getJSONArray("data");
+			colNameList = new String[jsArray.length()];
+
+			for (int i = 0; i < jsArray.length(); i++) {
+				colNameList[i] = jsArray.getJSONObject(i).getString("COLUMN_NAME");
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		return colNameList;
+	}
+
+
 
 	public void delete(String varQuery) {
 		String urlAdrs = phpDirAddress + "/delete.php";
@@ -118,9 +147,9 @@ public class HttpPost {
 		return tmpResult.toString();
 	}
 
-	String[] colList = {"DateTime", "Memo"};
+	String[] colList;
 
-	public String[][] jsonToStr(String originData) {
+	public String[][] selectAllJsonToArray(String originData) {
 		String[][] resultDataList = null;
 		// StringBuilder resultBuilder = new StringBuilder();
 		try {
@@ -132,6 +161,7 @@ public class HttpPost {
 				String lineResult = "";
 				for (int j = 0; j < colList.length; j++) {
 					resultDataList[i][j] = jsonObject.getString(colList[j]);
+
 				}
 
 			}

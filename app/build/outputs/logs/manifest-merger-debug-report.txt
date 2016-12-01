@@ -1,6 +1,6 @@
 -- Merging decision tree log ---
 manifest
-ADDED from C:\Users\USER\AndroidStudioProjects\SimpleMemo\app\src\main\AndroidManifest.xml:1:1-65:12
+ADDED from C:\Users\USER\AndroidStudioProjects\SimpleMemo\app\src\main\AndroidManifest.xml:1:1-67:12
 	package
 		ADDED from C:\Users\USER\AndroidStudioProjects\SimpleMemo\app\src\main\AndroidManifest.xml:2:11-35
 		INJECTED from C:\Users\USER\AndroidStudioProjects\SimpleMemo\app\src\main\AndroidManifest.xml
@@ -62,7 +62,7 @@ ADDED from C:\Users\USER\AndroidStudioProjects\SimpleMemo\app\src\main\AndroidMa
 	android:name
 		ADDED from C:\Users\USER\AndroidStudioProjects\SimpleMemo\app\src\main\AndroidManifest.xml:12:22-64
 application
-ADDED from C:\Users\USER\AndroidStudioProjects\SimpleMemo\app\src\main\AndroidManifest.xml:14:5-64:19
+ADDED from C:\Users\USER\AndroidStudioProjects\SimpleMemo\app\src\main\AndroidManifest.xml:14:5-66:19
 MERGED from [com.android.support:appcompat-v7:24.2.1] C:\Users\USER\AndroidStudioProjects\SimpleMemo\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\24.2.1\AndroidManifest.xml:25:5-20
 MERGED from [com.android.support:support-v4:24.2.1] C:\Users\USER\AndroidStudioProjects\SimpleMemo\app\build\intermediates\exploded-aar\com.android.support\support-v4\24.2.1\AndroidManifest.xml:25:5-20
 MERGED from [com.android.support:support-compat:24.2.1] C:\Users\USER\AndroidStudioProjects\SimpleMemo\app\build\intermediates\exploded-aar\com.android.support\support-compat\24.2.1\AndroidManifest.xml:25:5-20
@@ -90,7 +90,7 @@ MERGED from [com.android.support:support-compat:24.2.1] C:\Users\USER\AndroidStu
 	android:allowBackup
 		ADDED from C:\Users\USER\AndroidStudioProjects\SimpleMemo\app\src\main\AndroidManifest.xml:15:9-35
 	android:icon
-		ADDED from C:\Users\USER\AndroidStudioProjects\SimpleMemo\app\src\main\AndroidManifest.xml:16:9-46
+		ADDED from C:\Users\USER\AndroidStudioProjects\SimpleMemo\app\src\main\AndroidManifest.xml:16:9-43
 	android:theme
 		ADDED from C:\Users\USER\AndroidStudioProjects\SimpleMemo\app\src\main\AndroidManifest.xml:18:9-40
 activity#com.simplememo.ActMain
@@ -138,36 +138,40 @@ ADDED from C:\Users\USER\AndroidStudioProjects\SimpleMemo\app\src\main\AndroidMa
 	android:name
 		ADDED from C:\Users\USER\AndroidStudioProjects\SimpleMemo\app\src\main\AndroidManifest.xml:36:13-47
 activity#com.simplememo.ActShortcutCreateNowMemoStart
-ADDED from C:\Users\USER\AndroidStudioProjects\SimpleMemo\app\src\main\AndroidManifest.xml:42:9-51:20
+ADDED from C:\Users\USER\AndroidStudioProjects\SimpleMemo\app\src\main\AndroidManifest.xml:42:9-52:20
 	android:label
-		ADDED from C:\Users\USER\AndroidStudioProjects\SimpleMemo\app\src\main\AndroidManifest.xml:45:13-45
+		ADDED from C:\Users\USER\AndroidStudioProjects\SimpleMemo\app\src\main\AndroidManifest.xml:46:13-45
 	android:excludeFromRecents
-		ADDED from C:\Users\USER\AndroidStudioProjects\SimpleMemo\app\src\main\AndroidManifest.xml:44:13-46
+		ADDED from C:\Users\USER\AndroidStudioProjects\SimpleMemo\app\src\main\AndroidManifest.xml:45:13-46
 	android:noHistory
-		ADDED from C:\Users\USER\AndroidStudioProjects\SimpleMemo\app\src\main\AndroidManifest.xml:46:13-37
+		ADDED from C:\Users\USER\AndroidStudioProjects\SimpleMemo\app\src\main\AndroidManifest.xml:47:13-37
+	android:icon
+		ADDED from C:\Users\USER\AndroidStudioProjects\SimpleMemo\app\src\main\AndroidManifest.xml:44:13-52
 	android:name
 		ADDED from C:\Users\USER\AndroidStudioProjects\SimpleMemo\app\src\main\AndroidManifest.xml:43:13-58
 intent-filter#android.intent.action.CREATE_SHORTCUT+android.intent.category.DEFAULT
-ADDED from C:\Users\USER\AndroidStudioProjects\SimpleMemo\app\src\main\AndroidManifest.xml:47:13-50:29
+ADDED from C:\Users\USER\AndroidStudioProjects\SimpleMemo\app\src\main\AndroidManifest.xml:48:13-51:29
 action#android.intent.action.CREATE_SHORTCUT
-ADDED from C:\Users\USER\AndroidStudioProjects\SimpleMemo\app\src\main\AndroidManifest.xml:48:17-79
+ADDED from C:\Users\USER\AndroidStudioProjects\SimpleMemo\app\src\main\AndroidManifest.xml:49:17-79
 	android:name
-		ADDED from C:\Users\USER\AndroidStudioProjects\SimpleMemo\app\src\main\AndroidManifest.xml:48:25-77
+		ADDED from C:\Users\USER\AndroidStudioProjects\SimpleMemo\app\src\main\AndroidManifest.xml:49:25-77
 category#android.intent.category.DEFAULT
-ADDED from C:\Users\USER\AndroidStudioProjects\SimpleMemo\app\src\main\AndroidManifest.xml:49:17-75
+ADDED from C:\Users\USER\AndroidStudioProjects\SimpleMemo\app\src\main\AndroidManifest.xml:50:17-75
 	android:name
-		ADDED from C:\Users\USER\AndroidStudioProjects\SimpleMemo\app\src\main\AndroidManifest.xml:49:27-73
+		ADDED from C:\Users\USER\AndroidStudioProjects\SimpleMemo\app\src\main\AndroidManifest.xml:50:27-73
 activity#com.simplememo.ActShortcutCreateMemoList
-ADDED from C:\Users\USER\AndroidStudioProjects\SimpleMemo\app\src\main\AndroidManifest.xml:52:9-61:20
+ADDED from C:\Users\USER\AndroidStudioProjects\SimpleMemo\app\src\main\AndroidManifest.xml:53:9-63:20
 	android:label
-		ADDED from C:\Users\USER\AndroidStudioProjects\SimpleMemo\app\src\main\AndroidManifest.xml:55:13-46
+		ADDED from C:\Users\USER\AndroidStudioProjects\SimpleMemo\app\src\main\AndroidManifest.xml:57:13-46
 	android:excludeFromRecents
-		ADDED from C:\Users\USER\AndroidStudioProjects\SimpleMemo\app\src\main\AndroidManifest.xml:54:13-46
+		ADDED from C:\Users\USER\AndroidStudioProjects\SimpleMemo\app\src\main\AndroidManifest.xml:56:13-46
 	android:noHistory
-		ADDED from C:\Users\USER\AndroidStudioProjects\SimpleMemo\app\src\main\AndroidManifest.xml:56:13-37
+		ADDED from C:\Users\USER\AndroidStudioProjects\SimpleMemo\app\src\main\AndroidManifest.xml:58:13-37
+	android:icon
+		ADDED from C:\Users\USER\AndroidStudioProjects\SimpleMemo\app\src\main\AndroidManifest.xml:55:13-47
 	android:name
-		ADDED from C:\Users\USER\AndroidStudioProjects\SimpleMemo\app\src\main\AndroidManifest.xml:53:13-54
+		ADDED from C:\Users\USER\AndroidStudioProjects\SimpleMemo\app\src\main\AndroidManifest.xml:54:13-54
 service#com.simplememo.Svc
-ADDED from C:\Users\USER\AndroidStudioProjects\SimpleMemo\app\src\main\AndroidManifest.xml:63:9-40
+ADDED from C:\Users\USER\AndroidStudioProjects\SimpleMemo\app\src\main\AndroidManifest.xml:65:9-40
 	android:name
-		ADDED from C:\Users\USER\AndroidStudioProjects\SimpleMemo\app\src\main\AndroidManifest.xml:63:18-37
+		ADDED from C:\Users\USER\AndroidStudioProjects\SimpleMemo\app\src\main\AndroidManifest.xml:65:18-37
