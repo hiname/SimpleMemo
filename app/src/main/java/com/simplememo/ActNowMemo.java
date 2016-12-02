@@ -82,7 +82,7 @@ public class ActNowMemo extends Activity {
 
 					@Override
 					protected Void doInBackground(Void... params) {
-						memoData.dbInsert(inputStr);
+						memoData.dbInsertMemoData(inputStr);
 						return null;
 					}
 

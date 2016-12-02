@@ -13,6 +13,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Iterator;
 
 /**
  * Created by USER on 2016-10-27.
@@ -47,6 +48,33 @@ public class HttpPost {
 		String urlAdrs = phpDirAddress + "/getColNameList.php";
 		Log.d("", "└urlAdrs : " + urlAdrs);
 		return postURL(urlAdrs);
+	}
+
+	public String[][] jsonToArray(String jsonOriginData) {
+		Log.d("d", "jsonToArray_jsonOriginData : " + jsonOriginData);
+		String[][] resultDataList = null;
+		try {
+			JSONObject json = new JSONObject(jsonOriginData);
+			JSONArray array = json.getJSONArray("data");
+
+
+			int colLen = array.getJSONObject(0).toString().replaceAll("[{}\"]", "").split(",").length;
+			resultDataList = new String[array.length()][colLen];
+
+			for (int i = 0; i < array.length(); i++) {
+
+				String[] jsonLine = array.getJSONObject(i).toString().replaceAll("[{}\"]", "").split(",");
+				Log.d("d", "strLen : " + jsonLine.length);
+
+				for (int j = 0; j < colLen; j++) {
+					resultDataList[i][j] = jsonLine[j].split("\\:")[0];
+				}
+
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return resultDataList;
 	}
 
 	public String[] colNameJsonToArray(String colNameJson) {
@@ -109,6 +137,12 @@ public class HttpPost {
 	 * @return loadPageData
 	 */
 	public String postURL(final String urlAdrs, final String varQuery, final String enc) {
+		Log.d(getClass().getSimpleName(),
+				new Exception().getStackTrace()[1].getMethodName() + "\n"
+					+ "└urlAdrs : " + urlAdrs + "\n"
+					+ "└varQuery : " + varQuery + "\n"
+					+ "└enc : " + enc
+		);
 		final StringBuilder tmpResult = new StringBuilder();
 		if (enc != null) pageEnc = enc;
 		Thread webConnThread = new Thread() {

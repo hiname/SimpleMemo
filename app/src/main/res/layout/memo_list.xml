@@ -22,17 +22,24 @@
         android:layout_weight="0.2">
 
         <Button
-            android:id="@+id/btnSendDBAll"
+            android:id="@+id/btnServerSave"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="모두 DB전송"/>
+            android:text="서버에 저장"/>
+
+        <Button
+            android:id="@+id/btnServerLoad"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="서버에서 불러오기"/>
 
         <Button
             android:id="@+id/btnAddMemo"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="추가"/>
+            android:text="메모 추가"/>
     </LinearLayout>
 </LinearLayout>

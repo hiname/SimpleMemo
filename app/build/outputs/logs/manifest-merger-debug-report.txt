@@ -1,6 +1,6 @@
 -- Merging decision tree log ---
 manifest
-ADDED from C:\Users\USER\AndroidStudioProjects\SimpleMemo\app\src\main\AndroidManifest.xml:1:1-67:12
+ADDED from C:\Users\USER\AndroidStudioProjects\SimpleMemo\app\src\main\AndroidManifest.xml:1:1-70:12
 	package
 		ADDED from C:\Users\USER\AndroidStudioProjects\SimpleMemo\app\src\main\AndroidManifest.xml:2:11-35
 		INJECTED from C:\Users\USER\AndroidStudioProjects\SimpleMemo\app\src\main\AndroidManifest.xml
@@ -62,7 +62,7 @@ ADDED from C:\Users\USER\AndroidStudioProjects\SimpleMemo\app\src\main\AndroidMa
 	android:name
 		ADDED from C:\Users\USER\AndroidStudioProjects\SimpleMemo\app\src\main\AndroidManifest.xml:12:22-64
 application
-ADDED from C:\Users\USER\AndroidStudioProjects\SimpleMemo\app\src\main\AndroidManifest.xml:14:5-66:19
+ADDED from C:\Users\USER\AndroidStudioProjects\SimpleMemo\app\src\main\AndroidManifest.xml:14:5-69:19
 MERGED from [com.android.support:appcompat-v7:24.2.1] C:\Users\USER\AndroidStudioProjects\SimpleMemo\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\24.2.1\AndroidManifest.xml:25:5-20
 MERGED from [com.android.support:support-v4:24.2.1] C:\Users\USER\AndroidStudioProjects\SimpleMemo\app\build\intermediates\exploded-aar\com.android.support\support-v4\24.2.1\AndroidManifest.xml:25:5-20
 MERGED from [com.android.support:support-compat:24.2.1] C:\Users\USER\AndroidStudioProjects\SimpleMemo\app\build\intermediates\exploded-aar\com.android.support\support-compat\24.2.1\AndroidManifest.xml:25:5-20
@@ -175,3 +175,7 @@ service#com.simplememo.Svc
 ADDED from C:\Users\USER\AndroidStudioProjects\SimpleMemo\app\src\main\AndroidManifest.xml:65:9-40
 	android:name
 		ADDED from C:\Users\USER\AndroidStudioProjects\SimpleMemo\app\src\main\AndroidManifest.xml:65:18-37
+activity#com.simplememo.ActLoadList
+ADDED from C:\Users\USER\AndroidStudioProjects\SimpleMemo\app\src\main\AndroidManifest.xml:67:9-48
+	android:name
+		ADDED from C:\Users\USER\AndroidStudioProjects\SimpleMemo\app\src\main\AndroidManifest.xml:67:19-46

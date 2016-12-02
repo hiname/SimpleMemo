@@ -63,5 +63,8 @@
         </activity>
 
         <service android:name=".Svc" />
+
+        <activity android:name=".ActLoadList"/>
+
     </application>
 </manifest>

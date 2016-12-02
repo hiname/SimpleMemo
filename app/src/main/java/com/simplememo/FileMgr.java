@@ -128,7 +128,6 @@ public class FileMgr {
 			fileDir.mkdirs();
 		}
 
-
 		try {
 //			if(!isAppend)
 //				new FileOutputStream(filePath).close();

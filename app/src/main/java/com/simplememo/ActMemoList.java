@@ -65,9 +65,7 @@ public class ActMemoList extends Activity implements ListUpdate{
 									}
 								});
 				builder.setCancelable(true);
-				final AlertDialog alert = builder.create();
-
-				alert.show();
+				builder.create().show();
 				return false;
 			}
 		});
@@ -79,7 +77,7 @@ public class ActMemoList extends Activity implements ListUpdate{
 			}
 		});
 
-		findViewById(R.id.btnSendDBAll).setOnClickListener(new View.OnClickListener() {
+		findViewById(R.id.btnServerSave).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				new AsyncTask<Object, Object, Object>() {
@@ -91,8 +89,8 @@ public class ActMemoList extends Activity implements ListUpdate{
 			}
 		});
 
-		final Button btnSendDBAll = (Button) findViewById(R.id.btnSendDBAll);
-		btnSendDBAll.setOnClickListener(new View.OnClickListener() {
+		final Button btnServerSave = (Button) findViewById(R.id.btnServerSave);
+		btnServerSave.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				final String dataPack = memoData.toDataPack();
@@ -100,22 +98,30 @@ public class ActMemoList extends Activity implements ListUpdate{
 					@Override
 					protected void onPreExecute() {
 						super.onPreExecute();
-						btnSendDBAll.setEnabled(false);
+						btnServerSave.setEnabled(false);
 					}
 
 					@Override
 					protected Void doInBackground(Void... params) {
-						memoData.dbInsert(dataPack);
+						memoData.dbInsertMemoData(dataPack);
 						return null;
 					}
 
 					@Override
 					protected void onPostExecute(Void aVoid) {
 						super.onPostExecute(aVoid);
-						btnSendDBAll.setEnabled(true);
+						btnServerSave.setEnabled(true);
 						Toast.makeText(ActMemoList.this, "모두 전송 됐습니다.\n→" + dataPack + "←", Toast.LENGTH_SHORT).show();
 					}
 				}.execute();
+			}
+		});
+
+		final Button btnServerLoad = (Button) findViewById(R.id.btnServerLoad);
+		btnServerLoad.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				startActivity(new Intent(ActMemoList.this, ActLoadList.class));
 			}
 		});
 

@@ -23,8 +23,7 @@ public class MemoData {
 	// String saveFileName = "spf";
 	SharedPreferences spf;
 	String dataPackKey = "dataPackKey";
-	// String memoSpliter = "sd";
-	String memoSpliter = "\n#newline#\n";
+	public static final String TAG_MEMO_SPLITER = "\n#newline#\n";
 	boolean isInitLoad = false;
 	Context context;
 
@@ -53,7 +52,7 @@ public class MemoData {
 		if (dataPack.length() > 2)
 			dataPack = dataPack.substring(0, dataPack.length() - 1);
 
-		String dataList[] = dataPack.split(memoSpliter);
+		String dataList[] = dataPack.split(TAG_MEMO_SPLITER);
 		for (String data : dataList) add(data);
 	}
 
@@ -69,10 +68,10 @@ public class MemoData {
 	public String toDataPack() {
 		String dataPack = "";
 		for (String data : arrayList) {
-			dataPack += data + memoSpliter;
+			dataPack += data + TAG_MEMO_SPLITER;
 		}
-		if (dataPack.length() > memoSpliter.length()) {
-			dataPack = dataPack.substring(0, dataPack.length() - memoSpliter.length());
+		if (dataPack.length() > TAG_MEMO_SPLITER.length()) {
+			dataPack = dataPack.substring(0, dataPack.length() - TAG_MEMO_SPLITER.length());
 		}
 		return dataPack;
 	}
@@ -170,7 +169,7 @@ public class MemoData {
 		return arrayList.get(idx).split(TAG_MEMO_END)[1];
 	}
 
-	int titleLen = 15;
+	int titleLen = 8;
 
 	public String[] getTitles() {
 		int size = arrayList.size();
@@ -178,12 +177,12 @@ public class MemoData {
 		String[] titles = new String[size];
 		for (int i = 0; i < size; i++) {
 			String nowMemo = getMemo(i);
-			if (nowMemo.length() > 2 && nowMemo.contains("\n")) {
-				nowMemo = nowMemo.split("\n")[0] + "...";
-			}
 			if (nowMemo.length() > titleLen) {
 				nowMemo = nowMemo.substring(0, titleLen) + "...";
+			} else if (nowMemo.length() > 2 && nowMemo.contains("\n")) {
+				nowMemo = nowMemo.split("\n")[0] + "...";
 			}
+
 			titles[i] = nowMemo;
 		}
 		return titles;
@@ -237,9 +236,13 @@ public class MemoData {
 	public static final String DB_URL = "http://hihost.dothome.co.kr/SimpleMemo";
 	private final HttpPost httpPost = new HttpPost(DB_URL);
 
-	public void dbInsert(String varQuery) {
+	public void dbInsertMemoData(String varQuery) {
 		String chArr = toCharCode(varQuery);
 		httpPost.insert("memo=" + chArr);
+	}
+
+	public void dbDeleteMemoData(String id) {
+		httpPost.delete("id=" + id);
 	}
 
 	private String toCharCode(String str) {
