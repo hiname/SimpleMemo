@@ -3,6 +3,7 @@ package com.simplememo;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Environment;
+import android.text.format.DateFormat;
 import android.util.Log;
 
 import java.io.File;
@@ -14,21 +15,30 @@ import java.util.Date;
  * Created by USER on 2016-11-28.
  */
 public class MemoData {
-	private MemoData() {}
+	private MemoData() {
+		if (!isInitLoad) {
+			isInitLoad = true;
+			loadByFile();
+		}
+	}
 
 	private static class Singleton {
 		private static MemoData instance = new MemoData();
 	}
+	
+	public static MemoData getInstance() {
+		return Singleton.instance;
+	}
 
 	// String saveFileName = "spf";
-	SharedPreferences spf;
+	// SharedPreferences spf;
 	String dataPackKey = "dataPackKey";
-	public static final String TAG_MEMO_SPLITER = "\n#newline#\n";
+	public static final String TAG_MEMO_SPLITER = "\n#mSplit#\n";
 	boolean isInitLoad = false;
-	Context context;
+	// Context context;
 
 	String saveDir = Environment.getExternalStorageDirectory() + "/simplememo";
-	String saveFileName = "fileToSave.txt";
+	String saveFileName = "saveMemoData.txt";
 	String saveFileFullPath = saveDir + "/" + saveFileName;
 
 	ListUpdate listUpdate;
@@ -37,7 +47,7 @@ public class MemoData {
 		this.listUpdate = listUpdate;
 	}
 
-	public void fileToLoad() {
+	public void loadByFile() {
 		File file = new File(saveFileFullPath);
 		if (!file.exists()) {
 			new File(saveDir).mkdirs();
@@ -52,17 +62,23 @@ public class MemoData {
 		if (dataPack.length() > 2)
 			dataPack = dataPack.substring(0, dataPack.length() - 1);
 
-		String dataList[] = dataPack.split(TAG_MEMO_SPLITER);
-		for (String data : dataList) add(data);
+		addMemoData(dataPack);
+	}
+	
+	public void addMemoData(String dataPack) {
+		for (String data : dataPack.split(TAG_MEMO_SPLITER)) { 
+			add(data);
+		}
 	}
 
-	public void fileToSave() {
+	public void saveInFile() {
 		String dataPack = toDataPack();
 //		SharedPreferences.Editor ed = spf.edit();
 //		ed.putString(dataPackKey, dataPack);
 //		ed.commit();
 
 		FileMgr.saveFileText(saveFileFullPath, dataPack, FileMgr.ENC_UTF8, false);
+		FileMgr.saveFileText(saveDir + "/backup/back" + new SimpleDateFormat("yy-MM-dd HH;mm;ss").format(new Date()) + ".txt" , dataPack, FileMgr.ENC_UTF8, false);
 	}
 
 	public String toDataPack() {
@@ -74,19 +90,6 @@ public class MemoData {
 			dataPack = dataPack.substring(0, dataPack.length() - TAG_MEMO_SPLITER.length());
 		}
 		return dataPack;
-	}
-
-	public static MemoData getInstance() {
-		return Singleton.instance;
-	}
-
-	public void setContext(Context context) {
-		this.context = context;
-		spf = context.getSharedPreferences(saveFileName, Context.MODE_PRIVATE);
-		if (!isInitLoad) {
-			isInitLoad = true;
-			fileToLoad();
-		}
 	}
 
 	private ArrayList<String> arrayList = new ArrayList<String>();
@@ -125,12 +128,9 @@ public class MemoData {
 
 	public void add(String inputStr) {
 		Log.d("d", "add str : " + inputStr);
-		Log.d("d", "!str.contains(TAG_CREATE_DATE_TIME) : " + !inputStr.contains(TAG_CREATE_DATE_TIME));
 		String memoInfo = "";
 		if (!inputStr.contains(TAG_CREATE_DATE_TIME)) {
-			String dateTimeStr = dateTimeFormat.format(new Date());
-			memoInfo = TAG_CREATE_DATE_TIME + dateTimeStr + TAG_CREATE_DATE_TIME;
-			memoInfo += getModifyDateTime();
+			memoInfo = generateCreateDateTime() + generateModifyDateTime();
 		}
 
 		arrayList.add(inputStr + TAG_MEMO_END + memoInfo);
@@ -149,11 +149,15 @@ public class MemoData {
 	public void set(int idx, String str) {
 		String getInfoData = get(idx).split(TAG_MEMO_END)[1];
 		String modify = TAG_MODIFY_DATE_TIME + StringMgr.extTagData(getInfoData, TAG_MODIFY_DATE_TIME) + TAG_MODIFY_DATE_TIME;
-		getInfoData = getInfoData.replace(modify, getModifyDateTime());
+		getInfoData = getInfoData.replace(modify, generateModifyDateTime());
 		arrayList.set(idx, str + TAG_MEMO_END + getInfoData);
 	}
 
-	public String getModifyDateTime() {
+	public String generateCreateDateTime() {
+		return TAG_CREATE_DATE_TIME + dateTimeFormat.format(new Date()) + TAG_CREATE_DATE_TIME;
+	}
+	
+	public String generateModifyDateTime() {
 		return TAG_MODIFY_DATE_TIME + dateTimeFormat.format(new Date()) + TAG_MODIFY_DATE_TIME;
 	}
 

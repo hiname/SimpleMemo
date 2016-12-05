@@ -3,7 +3,6 @@ package com.simplememo;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
-import android.support.annotation.Nullable;
 import android.widget.Toast;
 
 /**
@@ -22,7 +21,6 @@ public class Svc extends Service {
 		Toast.makeText(this, "종료", Toast.LENGTH_SHORT).show();
 	}
 
-	@Nullable
 	@Override
 	public IBinder onBind(Intent intent) {
 		return null;

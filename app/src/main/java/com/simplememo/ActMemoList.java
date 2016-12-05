@@ -28,7 +28,7 @@ public class ActMemoList extends Activity implements ListUpdate{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Log.d(TAG_CLASS_NAME, new Exception().getStackTrace()[0].getMethodName());
-		memoData.setContext(this);
+		// memoData.setContext(this);
 		setContentView(R.layout.memo_list);
 		listView1 = (ListView) findViewById(R.id.listView1);
 		listView1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -154,7 +154,7 @@ public class ActMemoList extends Activity implements ListUpdate{
 
 	@Override
 	protected void onPause() {
-		memoData.fileToSave();
+		memoData.saveInFile();
 		super.onPause();
 	}
 

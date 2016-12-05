@@ -19,15 +19,11 @@ public class ActNowMemo extends Activity {
 	private TextView tvCreateDateTime, tvModifyDateTime;
 
 	@Override
-	protected void onNewIntent(Intent intent) {
-		super.onNewIntent(intent);
-	}
-
-	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.now_memo);
 		editText1 = (EditText) findViewById(R.id.editText1);
+		editText1.setSingleLine(false);
 		tvCreateDateTime = (TextView) findViewById(R.id.tvCreateDateTime);
 		tvModifyDateTime = (TextView) findViewById(R.id.tvModifyDateTime);
 		// editText1.setSingleLine(false);
@@ -103,18 +99,23 @@ public class ActNowMemo extends Activity {
 	}
 
 	private void setMemo() {
-		String mode = memoData.getNowMode();
-		if (mode.equals(MemoData.MODE_MEMO_ADD)) {
-			memoData.setNowSelect(memoData.getSize());
-			memoData.addBlank();
-			memoData.setNowMode(MemoData.MODE_MEMO_ADD_EDIT);
-		}
-		String srcStr = memoData.getNowSelectMemo();
-		String inputStr = editText1.getText().toString();
+		String mode = memoData.getNowMode(); // 현재 모드 가져오기
 
-		Toast.makeText(ActNowMemo.this, "저장 됐습니다.\n→" + inputStr.replace(srcStr, "") + "←", Toast.LENGTH_SHORT).show();
-		memoData.setNowData(inputStr);
-		memoData.fileToSave();
+		// 메모 추가 모드
+		if (mode.equals(MemoData.MODE_MEMO_ADD)) {
+			memoData.setNowSelect(memoData.getSize()); // 셀렉트를 마지막 위치로
+			memoData.addBlank(); // 빈값 추가(추가 준비)
+			memoData.setNowMode(MemoData.MODE_MEMO_ADD_EDIT); // 메모 추가 편집 모드
+		}
+
+		String originalMemo = memoData.getNowSelectMemo();
+		String inputMemo = editText1.getText().toString();
+		String diffMemo = inputMemo.replace(originalMemo, "");
+
+		memoData.setNowData(inputMemo);
+		memoData.saveInFile();
+
+		Toast.makeText(ActNowMemo.this, "저장 됐습니다.\n→" + diffMemo + "←", Toast.LENGTH_SHORT).show();
 	}
 
 	@Override
@@ -141,8 +142,6 @@ public class ActNowMemo extends Activity {
 
 	@Override
 	protected void onDestroy() {
-
 		super.onDestroy();
-
 	}
 }
