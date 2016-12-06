@@ -1,7 +1,5 @@
 package com.simplememo;
 
-import android.util.Log;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -13,7 +11,6 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Iterator;
 
 /**
  * Created by USER on 2016-10-27.
@@ -21,42 +18,65 @@ import java.util.Iterator;
 public class HttpPost {
 	private String pageEnc = "UTF-8";
 	private String phpDirAddress = null;
+	private String sendQueryPhp = null;
+	private String tableName = null;
 
-	public HttpPost(String phpDirAddress) {
+	public HttpPost(String phpDirAddress, String tableName) {
 		this.phpDirAddress = phpDirAddress;
+		sendQueryPhp = phpDirAddress + "/sendQuery.php";
+		this.tableName = tableName;
 		String colNameJson = getColNameList();
-		colList = colNameJsonToArray(colNameJson);
+		colList = jsonToArrayOfColName(colNameJson);
 	}
 
-	public void insert(String varQuery) {
-		Log.d("", "insert : " + varQuery);
-		String urlAdrs = phpDirAddress + "/insert.php";
-		Log.d("", "└urlAdrs : " + urlAdrs);
-		String postResult = postURL(urlAdrs, varQuery);
-		Log.d("d", "postResult : " + postResult);
+	public String sendQuery(String query) {
+		String sqlQuery = "sqlQuery=" + query;
+		Debug.d("sqlQuery : " + sqlQuery);
+		String postResult = postURL(sendQueryPhp, sqlQuery);
+		postResult = postResult.trim();
+
+		return postResult;
+	}
+
+	public void insertMemo(String memo) {
+		Debug.d("┌insertMemo : " + memo);
+		String query = "INSERT INTO " + tableName + "(memo) VALUES('" + memo + "')";
+		String postResult = sendQuery(query);
+		Debug.d("└postResult : " + postResult);
 	}
 
 	public String selectAllOrigin() {
-		Log.d("", "selectAllOrigin");
-		String urlAdrs = phpDirAddress + "/selectAll.php";
-		Log.d("", "└urlAdrs : " + urlAdrs);
-		return postURL(urlAdrs);
+		String query = "SELECT * FROM " + tableName;
+		String postResult = sendQuery(query);
+		Debug.d("└postResult : " + postResult);
+		return postResult;
+	}
+
+	public void deleteById(String id) {
+		Debug.d("┌id : " + id);
+		String query = "DELETE FROM " + tableName + " WHERE id='" + id + "'";
+		String postResult = sendQuery(query);
+		Debug.d("└postResult : " + postResult);
+	}
+
+	public void truncateTable() {
+		String query = "TRUNCATE " + tableName;
+		String postResult = sendQuery(query);
+		Debug.d("└postResult : " + postResult);
 	}
 
 	public String getColNameList() {
-		Log.d("", "getColNameList");
+		Debug.d("getColNameList");
 		String urlAdrs = phpDirAddress + "/getColNameList.php";
-		Log.d("", "└urlAdrs : " + urlAdrs);
 		return postURL(urlAdrs);
 	}
 
 	public String[][] jsonToArray(String jsonOriginData) {
-		Log.d("d", "jsonToArray_jsonOriginData : " + jsonOriginData);
+		Debug.d("jsonToArray_jsonOriginData : " + jsonOriginData);
 		String[][] resultDataList = null;
 		try {
 			JSONObject json = new JSONObject(jsonOriginData);
 			JSONArray array = json.getJSONArray("data");
-
 
 			int colLen = array.getJSONObject(0).toString().replaceAll("[{}\"]", "").split(",").length;
 			resultDataList = new String[array.length()][colLen];
@@ -64,12 +84,11 @@ public class HttpPost {
 			for (int i = 0; i < array.length(); i++) {
 
 				String[] jsonLine = array.getJSONObject(i).toString().replaceAll("[{}\"]", "").split(",");
-				Log.d("d", "strLen : " + jsonLine.length);
+				Debug.d("strLen : " + jsonLine.length);
 
 				for (int j = 0; j < colLen; j++) {
 					resultDataList[i][j] = jsonLine[j].split("\\:")[0];
 				}
-
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -77,7 +96,7 @@ public class HttpPost {
 		return resultDataList;
 	}
 
-	public String[] colNameJsonToArray(String colNameJson) {
+	public String[] jsonToArrayOfColName(String colNameJson) {
 
 		String[] colNameList = null;
 		try {
@@ -93,18 +112,6 @@ public class HttpPost {
 		}
 
 		return colNameList;
-	}
-
-
-
-	public void delete(String varQuery) {
-		String urlAdrs = phpDirAddress + "/delete.php";
-		postURL(urlAdrs, varQuery);
-	}
-
-	public void trun() {
-		String urlAdrs = phpDirAddress + "/truncate.php";
-		openURL(urlAdrs);
 	}
 
 	public void openURL(final String urlString) {
@@ -137,12 +144,11 @@ public class HttpPost {
 	 * @return loadPageData
 	 */
 	public String postURL(final String urlAdrs, final String varQuery, final String enc) {
-		Log.d(getClass().getSimpleName(),
-				new Exception().getStackTrace()[1].getMethodName() + "\n"
-					+ "└urlAdrs : " + urlAdrs + "\n"
-					+ "└varQuery : " + varQuery + "\n"
-					+ "└enc : " + enc
+		Debug.d("┬urlAdrs : " + urlAdrs + "\n"
+				+ "└varQuery : " + varQuery + "\n"
+				+ "└enc : " + enc
 		);
+
 		final StringBuilder tmpResult = new StringBuilder();
 		if (enc != null) pageEnc = enc;
 		Thread webConnThread = new Thread() {
@@ -183,7 +189,7 @@ public class HttpPost {
 
 	String[] colList;
 
-	public String[][] selectAllJsonToArray(String originData) {
+	public String[][] jsonToArrayOfSelectAll(String originData) {
 		String[][] resultDataList = null;
 		// StringBuilder resultBuilder = new StringBuilder();
 		try {

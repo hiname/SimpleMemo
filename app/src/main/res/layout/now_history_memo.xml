@@ -53,24 +53,11 @@
         android:layout_weight="0.2">
 
         <Button
-            android:id="@+id/btnSendDB"
+            android:id="@+id/btnRestore"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="메모전송"/>
+            android:text="복원하기"/>
 
-        <Button
-            android:id="@+id/btnSave"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="저장하기"/>
-
-        <Button
-            android:id="@+id/btnSaveAndFin"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="저장 및 종료하기"/>
     </LinearLayout>
 </LinearLayout>

@@ -16,7 +16,16 @@ import android.widget.Toast;
 public class ActNowMemo extends Activity {
 	private EditText editText1;
 	private MemoData memoData = MemoData.getInstance();
-	private TextView tvCreateDateTime, tvModifyDateTime;
+	private TextView tvCreateDateTime, tvModifyDateTime, tvHistoryCount;
+
+	@Override
+	protected void onStart() {
+		super.onStart();
+		if (memoData.getNowMode().equals(MemoData.MODE_EDIT) || memoData.getNowMode().equals(MemoData.MODE_HISTORY_LIST)) {
+			editText1.setText(memoData.getNowSelectMemo());
+			tvHistoryCount.setText("내역갯수 : " + memoData.getNowSelectHistoryCount());
+		}
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -26,12 +35,21 @@ public class ActNowMemo extends Activity {
 		editText1.setSingleLine(false);
 		tvCreateDateTime = (TextView) findViewById(R.id.tvCreateDateTime);
 		tvModifyDateTime = (TextView) findViewById(R.id.tvModifyDateTime);
+		tvHistoryCount = (TextView) findViewById(R.id.tvHistoryCount);
 		// editText1.setSingleLine(false);
 		if (memoData.getNowMode().equals(MemoData.MODE_EDIT)) {
-			editText1.setText(memoData.getNowSelectMemo());
 			// editText1.setFocusable(true);
 			tvCreateDateTime.setText("만든시간 : " + memoData.getNowSelectCreateDateTime());
 			tvModifyDateTime.setText("수정시간 : " + memoData.getNowSelectModifyDateTime());
+			if (memoData.getNowSelectHistoryCount() > 0) {
+				tvHistoryCount.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						memoData.setNowMode(MemoData.MODE_HISTORY_LIST);
+						startActivity(new Intent(ActNowMemo.this, ActHistoryList.class));
+					}
+				});
+			}
 			final int getInptType = editText1.getInputType();
 			editText1.setVisibility(View.INVISIBLE);
 			editText1.setInputType(InputType.TYPE_NULL);
@@ -112,7 +130,7 @@ public class ActNowMemo extends Activity {
 		String inputMemo = editText1.getText().toString();
 		String diffMemo = inputMemo.replace(originalMemo, "");
 
-		memoData.setNowData(inputMemo);
+		memoData.modifyNowData(inputMemo);
 		memoData.saveInFile();
 
 		Toast.makeText(ActNowMemo.this, "저장 됐습니다.\n→" + diffMemo + "←", Toast.LENGTH_SHORT).show();
@@ -126,7 +144,7 @@ public class ActNowMemo extends Activity {
 		if (!inputStr.equals("")
 				&& !inputStr.equals(memoData.getNowSelectMemo()))
 			setMemo();
-		finish();
+		// finish();
 	}
 
 	@Override

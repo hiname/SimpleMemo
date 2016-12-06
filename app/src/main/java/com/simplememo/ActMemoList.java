@@ -121,7 +121,7 @@ public class ActMemoList extends Activity implements ListUpdate{
 		btnServerLoad.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				startActivity(new Intent(ActMemoList.this, ActLoadList.class));
+				startActivity(new Intent(ActMemoList.this, ActDBList.class));
 			}
 		});
 
@@ -137,7 +137,7 @@ public class ActMemoList extends Activity implements ListUpdate{
 	@Override
 	public void reloadList() {
 		Log.d(TAG_CLASS_NAME, new Exception().getStackTrace()[0].getMethodName());
-		String[] memoTitles = memoData.getTitles();
+		String[] memoTitles = memoData.getMemoTitles();
 		if (memoTitles == null)
 			memoTitles = new String[0];
 		arrayAdapter = new ArrayAdapter(this, R.layout.list_element, memoTitles);

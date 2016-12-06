@@ -7,9 +7,11 @@
         android:minSdkVersion="8"
         android:targetSdkVersion="21"/>
 
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
 
     <application
         android:allowBackup="true"
@@ -28,7 +30,8 @@
         </activity>
         <activity
             android:name=".ActNowMemo"
-            android:exported="true"/>
+            android:exported="true"
+            android:launchMode="singleTop"/>
         <activity
             android:name=".ActMemoList"
             android:exported="true"/>
@@ -41,10 +44,11 @@
         </activity>
         <activity
             android:name=".ActShortcutCreateNowMemoStart"
-            android:icon="@drawable/fast_memo_icon"
             android:excludeFromRecents="true"
+            android:icon="@drawable/fast_memo_icon"
             android:label="@string/now_memo"
-            android:noHistory="true">
+            android:noHistory="true"
+            android:theme="@android:style/Theme.Translucent">
             <intent-filter>
                 <action android:name="android.intent.action.CREATE_SHORTCUT"/>
                 <category android:name="android.intent.category.DEFAULT"/>
@@ -52,19 +56,21 @@
         </activity>
         <activity
             android:name=".ActShortcutCreateMemoList"
-            android:icon="@drawable/list_icon"
             android:excludeFromRecents="true"
+            android:icon="@drawable/list_icon"
             android:label="@string/memo_list"
-            android:noHistory="true">
+            android:noHistory="true"
+            android:theme="@android:style/Theme.Translucent">
             <intent-filter>
                 <action android:name="android.intent.action.CREATE_SHORTCUT"/>
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
 
-        <service android:name=".Svc" />
+        <service android:name=".Svc"/>
 
-        <activity android:name=".ActLoadList"/>
-
+        <activity android:name=".ActDBList"/>
+        <activity android:name=".ActHistoryList"/>
+        <activity android:name=".ActNowHistoryMemo"/>
     </application>
 </manifest>

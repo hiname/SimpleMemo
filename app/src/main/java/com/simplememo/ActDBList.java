@@ -3,10 +3,7 @@ package com.simplememo;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.SystemClock;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -14,19 +11,26 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * Created by USER on 2016-12-02.
  */
-public class ActLoadList extends Activity {
+public class ActDBList extends Activity {
 
 	ListView lvLoadList;
 	ArrayList<String> mainArrayList;
 
+
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		if (!NetworkMgr.isNetWork(this)) {
+			Toast.makeText(this, "인터넷 연결 상태를 확인하세요.", Toast.LENGTH_SHORT).show();
+			finish();
+			return;
+		}
+
 		setContentView(R.layout.load_list);
 		lvLoadList = (ListView) findViewById(R.id.lvLoadList);
 		reloadMainList();
@@ -42,7 +46,7 @@ public class ActLoadList extends Activity {
 				
 				final String dbSelMemoData = mainArrayList.get(selPos).split(":", 2)[1];
 				
-				AlertDialog.Builder builder = new AlertDialog.Builder(ActLoadList.this);
+				AlertDialog.Builder builder = new AlertDialog.Builder(ActDBList.this);
 				builder
 						.setMessage("어떻게 할까요?\n→ " + dbSelMemoData.split(MemoData.TAG_MEMO_END)[0].replaceAll(MemoData.TAG_MEMO_SPLITER, "\n") + " ←")
 						.setCancelable(false)
@@ -51,7 +55,7 @@ public class ActLoadList extends Activity {
 									@Override
 									public void onClick(DialogInterface dialog, int which) {
 										memoData.addMemoData(dbSelMemoData);
-										Toast.makeText(ActLoadList.this, "추가 : " + dbSelMemoData, Toast.LENGTH_SHORT).show();
+										Toast.makeText(ActDBList.this, "추가 : " + dbSelMemoData, Toast.LENGTH_SHORT).show();
 									}
 								})
 						.setNegativeButton("덮어쓰기",
@@ -87,7 +91,7 @@ public class ActLoadList extends Activity {
 				final String getId = dbIdAndMemo[0];
 				final String getMemoData = dbIdAndMemo[1];
 
-				AlertDialog.Builder builder = new AlertDialog.Builder(ActLoadList.this);
+				AlertDialog.Builder builder = new AlertDialog.Builder(ActDBList.this);
 				builder
 						.setMessage("삭제합니까?\n(삭제시 복구불가)→ " + getMemoData.split(MemoData.TAG_MEMO_END)[0].replaceAll(MemoData.TAG_MEMO_SPLITER, "\n") + " ←")
 						.setCancelable(false)
@@ -128,7 +132,20 @@ public class ActLoadList extends Activity {
 
 	private void reloadMainList() {
 		mainArrayList = loadDbIdAndMemoDataList();
-		ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.list_element, mainArrayList);
+		ArrayList<String> dbList = (ArrayList<String>) mainArrayList.clone();
+
+		for (int i = 0; i < dbList.size(); i++) {
+			String[] memoList = dbList.get(i).split(MemoData.TAG_MEMO_SPLITER);
+			String memo = "";
+			for (int j = 0; j < memoList.length; j++) {
+				memo += memoList[j].split(MemoData.TAG_MEMO_END)[0] + "\n";
+			}
+			if (memo.length() > 0) memo = memo.substring(0, memo.length() - 1);
+			// memo = memo.replaceAll(MemoData.TAG_MEMO_SPLITER, "");
+
+			dbList.set(i, memo);
+		}
+		ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.list_element, dbList);
 		lvLoadList.setAdapter(arrayAdapter);
 		arrayAdapter.notifyDataSetChanged();
 	}

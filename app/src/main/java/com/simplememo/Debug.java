@@ -20,4 +20,14 @@ public class Debug {
 		Log.d(obj.getClass().getSimpleName(), new Exception().getStackTrace()[2].getMethodName());
 
 	}
+
+	public static void d(String log) {
+		StackTraceElement[] steList = new Exception().getStackTrace();
+		for (int i = 1; i < 2; i++) {
+			String pkgs[] = steList[i].getClassName().split("\\.");
+			String simpleClassName = pkgs[pkgs.length - 1];
+			Log.d(simpleClassName + "." + steList[i].getMethodName(), log);
+		}
+	}
+
 }
