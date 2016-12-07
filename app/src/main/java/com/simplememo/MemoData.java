@@ -31,7 +31,6 @@ public class MemoData {
 	// String saveFileName = "spf";
 	// SharedPreferences spf;
 	String dataPackKey = "dataPackKey";
-	public static final String TAG_MEMO_SPLITER = "\n#mSplit#\n";
 	boolean isInitLoad = false;
 	// Context context;
 
@@ -43,7 +42,7 @@ public class MemoData {
 	String memoIdFileName = "memoId.txt";
 	String memoIdFileFullPath = saveDir + "/" + memoIdFileName;
 	//
-	String memoHistoryFileName = "memoHistory.txt";
+	String memoHistoryFileName = "memoHistoryList.txt";
 	String memoHistoryFileFullPath = saveDir + "/" + memoHistoryFileName;
 
 	ListUpdate listUpdate;
@@ -52,7 +51,7 @@ public class MemoData {
 		this.listUpdate = listUpdate;
 	}
 
-	public void loadByFile() {
+	public void loadFileMemoList() {
 		File saveFile = new File(saveFileFullPath);
 		if (!saveFile.exists()) {
 			new File(saveDir).mkdirs();
@@ -68,18 +67,28 @@ public class MemoData {
 			dataPack = dataPack.substring(0, dataPack.length() - 1);
 
 		addMemoData(dataPack);
+	}
 
+	public void loadFileMemoId() {
 		File memoIdFile = new File(memoIdFileFullPath);
 		if (!memoIdFile.exists()) {
 			FileMgr.saveFileText(memoIdFileFullPath, Integer.toString(memoId), FileMgr.ENC_UTF8, false);
 		}
 		memoId = Integer.parseInt(FileMgr.loadFileTextArray(memoIdFileFullPath, FileMgr.ENC_UTF8)[0].trim());
+	}
 
+	public void loadFileMemoHistory() {
 		File memoHistoryFile = new File(memoHistoryFileFullPath);
 		if (!memoHistoryFile.exists()) {
 			FileMgr.saveFileText(memoHistoryFileFullPath, "메모 수정 내역", FileMgr.ENC_UTF8, false);
 		}
-		memoHistory = new ArrayList<String>(Arrays.asList(FileMgr.loadFileTextArray(memoHistoryFileFullPath, FileMgr.ENC_UTF8)));
+		memoHistoryList = new ArrayList<String>(Arrays.asList(FileMgr.loadFileTextArray(memoHistoryFileFullPath, FileMgr.ENC_UTF8)));
+	}
+
+	public void loadByFile() {
+		loadFileMemoList();
+		loadFileMemoId();
+		loadFileMemoHistory();
 	}
 
 	public String getNowId() {
@@ -88,7 +97,7 @@ public class MemoData {
 	}
 
 	public ArrayList<String> getNowSelectHistoryList() {
-		return getHistoryList(getNowId());
+		return getHistoryListById(getNowId());
 	}
 
 	private ArrayList<String> nowSelectHistoryList  = new ArrayList<String>();
@@ -107,18 +116,18 @@ public class MemoData {
 	}
 
 	public void removeMemoHistory(int idx) {
-		memoHistory.remove(idx);
+		memoHistoryList.remove(idx);
 	}
 
 	public void restoreNowHistorySelect() {
 		modifyNowData(getNowHistoryItem());
 	}
 
-	public ArrayList<String> getHistoryList(String id) {
+	public ArrayList<String> getHistoryListById(String id) {
 		nowSelectHistoryList.clear();
 		nowSelectHistoryListOfIdx.clear();
 		int idx = 0;
-		for (String history : memoHistory) {
+		for (String history : memoHistoryList) {
 			if (id.equals(StringMgr.extTagData(history, TAG_MEMO_ID))) {
 				nowSelectHistoryList.add(history);
 				nowSelectHistoryListOfIdx.add(idx);
@@ -132,11 +141,11 @@ public class MemoData {
 		return getHistoryIdCount(getNowId());
 	}
 
-	ArrayList<String> memoHistory = new ArrayList<String>();
+	ArrayList<String> memoHistoryList = new ArrayList<String>();
 
 	public int getHistoryIdCount(String id) {
 		int count = 0;
-		for (String history : memoHistory) {
+		for (String history : memoHistoryList) {
 			if (id.equals(StringMgr.extTagData(history, TAG_MEMO_ID))) {
 				count++;
 			}
@@ -144,14 +153,20 @@ public class MemoData {
 		return count;
 	}
 
-	public void addMemoData(String dataPack) {
-		for (String data : dataPack.split(TAG_MEMO_SPLITER)) { 
+	public void addMemoData(String memoDataPack) {
+		for (String data : memoDataPack.split(TAG_MEMO_SPLITER)) {
 			add(data);
 		}
 	}
 
+	public void addHistoryData(String historyDataPack) {
+		for (String data : historyDataPack.split(TAG_MEMO_SPLITER)) {
+			memoHistoryList.add(data);
+		}
+	}
+
 	public void saveInFile() {
-		String dataPack = toDataPack();
+		String dataPack = getMemoDataPack();
 //		SharedPreferences.Editor ed = spf.edit();
 //		ed.putString(dataPackKey, dataPack);
 //		ed.commit();
@@ -159,8 +174,8 @@ public class MemoData {
 		FileMgr.saveFileText(saveFileFullPath, dataPack, FileMgr.ENC_UTF8, false);
 		FileMgr.saveFileText(saveDir + "/backup/back" + new SimpleDateFormat("yy-MM-dd HH;mm;ss").format(new Date()) + ".txt" , dataPack, FileMgr.ENC_UTF8, false);
 		FileMgr.saveFileText(memoIdFileFullPath, Integer.toString(memoId), FileMgr.ENC_UTF8, false);
-		FileMgr.saveFileText(memoHistoryFileFullPath, memoHistory, FileMgr.ENC_UTF8, false);
-		Debug.d("memoHistoryOfSaveReady.size : " + memoHistoryOfSaveReady.size());
+		FileMgr.saveFileText(memoHistoryFileFullPath, memoHistoryList, FileMgr.ENC_UTF8, false);
+		// Debug.d("memoHistoryOfSaveReady.size : " + memoHistoryOfSaveReady.size());
 
 //		if (memoHistoryOfSaveReady.size() > 0) {
 //			FileMgr.saveFileText(memoHistoryFileFullPath, memoHistoryOfSaveReady, FileMgr.ENC_UTF8, true);
@@ -168,15 +183,26 @@ public class MemoData {
 //		}
 	}
 
-	public String toDataPack() {
-		String dataPack = "";
+	public String getMemoDataPack() {
+		String memoDataPack = "";
 		for (String data : memoDataList) {
-			dataPack += data + TAG_MEMO_SPLITER;
+			memoDataPack += data + TAG_MEMO_SPLITER;
 		}
-		if (dataPack.length() > TAG_MEMO_SPLITER.length()) {
-			dataPack = dataPack.substring(0, dataPack.length() - TAG_MEMO_SPLITER.length());
+		if (memoDataPack.length() > TAG_MEMO_SPLITER.length()) {
+			memoDataPack = memoDataPack.substring(0, memoDataPack.length() - TAG_MEMO_SPLITER.length());
 		}
-		return dataPack;
+		return memoDataPack;
+	}
+
+	public String getHistoryDataPack() {
+		String historyDataPack = "";
+		for (String data : memoHistoryList) {
+			historyDataPack += data + TAG_MEMO_SPLITER;
+		}
+		if (historyDataPack.length() > TAG_MEMO_SPLITER.length()) {
+			historyDataPack = historyDataPack.substring(0, historyDataPack.length() - TAG_MEMO_SPLITER.length());
+		}
+		return historyDataPack;
 	}
 
 	private ArrayList<String> memoDataList = new ArrayList<String>();
@@ -221,9 +247,12 @@ public class MemoData {
 		add("blank");
 	}
 
-	public static final String TAG_MEMO_ID = "#id#";
-	public static final String TAG_CREATE_DATE_TIME = "#create#";
-	public static final String TAG_MODIFY_DATE_TIME = "#modify#";
+	static final String TAG_MEMO_SPLITER = "\n#mSplit#\n";
+	static final String TAG_MEMO_ID = "#id#";
+	static final String TAG_CREATE_DATE_TIME = "#create#";
+	static final String TAG_MODIFY_DATE_TIME = "#modify#";
+	static final String TAG_MEMO_DATA = "#memo#";
+	static final String TAG_HISTORY = "#history#";
 
 	public void add(String inputStr) {
 		Log.d("d", "add str : " + inputStr);
@@ -245,7 +274,7 @@ public class MemoData {
 
 	public static final String TAG_MEMO_END = "#memoEnd#";
 
-	ArrayList<String> memoHistoryOfSaveReady = new ArrayList<String>();
+	// ArrayList<String> memoHistoryOfSaveReady = new ArrayList<String>();
 
 	public void modifyData(int idx, String str) {
 		String getInfoData = get(idx).split(TAG_MEMO_END)[1];
@@ -254,8 +283,8 @@ public class MemoData {
 		String memo = str + TAG_MEMO_END + getInfoData;
 		memoDataList.set(idx, memo);
 		Debug.d("addMemoHistory : " + memo);
-		memoHistoryOfSaveReady.add(memo);
-		memoHistory.add(memo);
+		// memoHistoryOfSaveReady.add(memo);
+		memoHistoryList.add(memo);
 	}
 
 	int memoId;

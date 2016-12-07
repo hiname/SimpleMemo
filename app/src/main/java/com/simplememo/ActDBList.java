@@ -44,7 +44,8 @@ public class ActDBList extends Activity {
 				// final String dbSelMemoData = dbSelData.split(" / ")[2];				// 
 				// Log.d("d", dbSelData);
 				
-				final String dbSelMemoData = mainArrayList.get(selPos).split(":", 2)[1];
+				final String dbSelData = mainArrayList.get(selPos).split(":", 2)[1];
+				final String dbSelMemoData = StringMgr.extTagData(dbSelData, MemoData.TAG_MEMO_DATA);
 				
 				AlertDialog.Builder builder = new AlertDialog.Builder(ActDBList.this);
 				builder
@@ -56,6 +57,9 @@ public class ActDBList extends Activity {
 									public void onClick(DialogInterface dialog, int which) {
 										memoData.addMemoData(dbSelMemoData);
 										Toast.makeText(ActDBList.this, "추가 : " + dbSelMemoData, Toast.LENGTH_SHORT).show();
+										final String dbSelHistoryData = StringMgr.extTagData(dbSelData, MemoData.TAG_HISTORY);
+										memoData.addHistoryData(dbSelHistoryData);
+										memoData.loadFileMemoHistory();
 									}
 								})
 						.setNegativeButton("덮어쓰기",
@@ -63,6 +67,8 @@ public class ActDBList extends Activity {
 									@Override
 									public void onClick(DialogInterface dialog, int which) {
 										FileMgr.saveFileText(memoData.saveFileFullPath, dbSelMemoData, FileMgr.ENC_UTF8, false);
+										final String dbSelHistoryData = StringMgr.extTagData(dbSelData, MemoData.TAG_HISTORY);
+										memoData.addHistoryData(dbSelHistoryData);
 										memoData.loadByFile();
 										finish();
 										return;
@@ -135,7 +141,7 @@ public class ActDBList extends Activity {
 		ArrayList<String> dbList = (ArrayList<String>) mainArrayList.clone();
 
 		for (int i = 0; i < dbList.size(); i++) {
-			String[] memoList = dbList.get(i).split(MemoData.TAG_MEMO_SPLITER);
+			String[] memoList = StringMgr.extTagData(dbList.get(i), MemoData.TAG_MEMO_DATA).split(MemoData.TAG_MEMO_SPLITER);
 			String memo = "";
 			for (int j = 0; j < memoList.length; j++) {
 				memo += memoList[j].split(MemoData.TAG_MEMO_END)[0] + "\n";

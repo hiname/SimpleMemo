@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -19,10 +18,9 @@ public class ActMemoList extends Activity implements ListUpdate{
 	private final String TAG_CLASS_NAME = ActMemoList.this.getClass().getSimpleName();
 
 	MemoData memoData = MemoData.getInstance();
-	ListView listView1;
+	ListView lvMemoList;
 	ArrayAdapter arrayAdapter;
 	// int nowSelect = -1;
-
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -30,8 +28,8 @@ public class ActMemoList extends Activity implements ListUpdate{
 		Log.d(TAG_CLASS_NAME, new Exception().getStackTrace()[0].getMethodName());
 		// memoData.setContext(this);
 		setContentView(R.layout.memo_list);
-		listView1 = (ListView) findViewById(R.id.listView1);
-		listView1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+		lvMemoList = (ListView) findViewById(R.id.listView1);
+		lvMemoList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				memoData.setNowSelect(position);
@@ -41,7 +39,7 @@ public class ActMemoList extends Activity implements ListUpdate{
 			}
 		});
 
-		listView1.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+		lvMemoList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 				final int selPos = position;
@@ -77,48 +75,26 @@ public class ActMemoList extends Activity implements ListUpdate{
 			}
 		});
 
-		findViewById(R.id.btnServerSave).setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				new AsyncTask<Object, Object, Object>() {
-					@Override
-					protected Object doInBackground(Object... params) {
-						return null;
-					}
-				};
-			}
-		});
-
 		final Button btnServerSave = (Button) findViewById(R.id.btnServerSave);
 		btnServerSave.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				final String dataPack = memoData.toDataPack();
-				new AsyncTask<Void, Void, Void>() {
-					@Override
-					protected void onPreExecute() {
-						super.onPreExecute();
-						btnServerSave.setEnabled(false);
-					}
+				btnServerSave.setEnabled(false);
 
-					@Override
-					protected Void doInBackground(Void... params) {
-						memoData.dbInsertMemoData(dataPack);
-						return null;
-					}
+				String memoDataPack = memoData.getMemoDataPack();
+				String historyDataPack = memoData.getHistoryDataPack();
 
-					@Override
-					protected void onPostExecute(Void aVoid) {
-						super.onPostExecute(aVoid);
-						btnServerSave.setEnabled(true);
-						Toast.makeText(ActMemoList.this, "모두 전송 됐습니다.\n→" + dataPack + "←", Toast.LENGTH_SHORT).show();
-					}
-				}.execute();
+				String dataPack = MemoData.TAG_MEMO_DATA + memoDataPack + MemoData.TAG_MEMO_DATA;
+				dataPack += MemoData.TAG_HISTORY + historyDataPack + MemoData.TAG_HISTORY;
+
+				memoData.dbInsertMemoData(dataPack);
+				Toast.makeText(ActMemoList.this, "모두 전송 됐습니다.\n→" + dataPack + "←", Toast.LENGTH_SHORT).show();
+
+				btnServerSave.setEnabled(true);
 			}
 		});
 
-		final Button btnServerLoad = (Button) findViewById(R.id.btnServerLoad);
-		btnServerLoad.setOnClickListener(new View.OnClickListener() {
+		findViewById(R.id.btnServerLoad).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				startActivity(new Intent(ActMemoList.this, ActDBList.class));
@@ -141,7 +117,7 @@ public class ActMemoList extends Activity implements ListUpdate{
 		if (memoTitles == null)
 			memoTitles = new String[0];
 		arrayAdapter = new ArrayAdapter(this, R.layout.list_element, memoTitles);
-		listView1.setAdapter(arrayAdapter);
+		lvMemoList.setAdapter(arrayAdapter);
 		arrayAdapter.notifyDataSetChanged();
 	}
 

@@ -13,8 +13,8 @@ public class ActMain extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		 startActivity(new Intent(this, ActMemoList.class));
-		 finish();
+		startActivity(new Intent(this, ActMemoList.class));
+		finish();
 
 		// HttpPost httpPost = new HttpPost(MemoData.DB_URL, "SimpleMemo");
 		// String sqlQuery = "sqlQuery=SELECT * FROM SimpleMemo";
@@ -22,7 +22,6 @@ public class ActMain extends Activity {
 		// Log.d("d", "print : " + print);
 
 		// Debug.d(httpPost.selectAllOrigin());
-
 
 	}
 
