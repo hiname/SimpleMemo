@@ -21,6 +21,10 @@ public class Debug {
 
 	}
 
+	public static void d() {
+		d("mOrder");
+	}
+
 	public static void d(String log) {
 		StackTraceElement[] steList = new Exception().getStackTrace();
 		for (int i = 1; i < 2; i++) {

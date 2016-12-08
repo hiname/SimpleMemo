@@ -5,12 +5,17 @@ package com.simplememo;
  */
 public class StringMgr {
 
-	public static String extTagData(String text, String tag) {
-		if (text.contains(tag)) {
-			int start = text.indexOf(tag) + tag.length();
-			int end = text.indexOf(tag, start + 1);
+	public static String extTagDataDefText(String str, String tag) {
+		String ext = extTagData(str, tag);
+		return (ext == null) ? str : ext;
+	}
+
+	public static String extTagData(String str, String tag) {
+		if (str.contains(tag)) {
+			int start = str.indexOf(tag) + tag.length();
+			int end = str.indexOf(tag, start + 1);
 			if (end == -1) return null;
-			return text.substring(start, end);
+			return str.substring(start, end);
 		} else {
 			return null;
 		}

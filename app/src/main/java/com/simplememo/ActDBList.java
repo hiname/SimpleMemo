@@ -19,6 +19,7 @@ public class ActDBList extends Activity {
 
 	ListView lvLoadList;
 	ArrayList<String> mainArrayList;
+	ArrayAdapter<String> arrayAdapter;
 
 
 
@@ -31,7 +32,7 @@ public class ActDBList extends Activity {
 			return;
 		}
 
-		setContentView(R.layout.load_list);
+		setContentView(R.layout.db_list);
 		lvLoadList = (ListView) findViewById(R.id.lvLoadList);
 		reloadMainList();
 		//
@@ -45,7 +46,7 @@ public class ActDBList extends Activity {
 				// Log.d("d", dbSelData);
 				
 				final String dbSelData = mainArrayList.get(selPos).split(":", 2)[1];
-				final String dbSelMemoData = StringMgr.extTagData(dbSelData, MemoData.TAG_MEMO_DATA);
+				final String dbSelMemoData = StringMgr.extTagDataDefText(dbSelData, MemoData.TAG_MEMO_DATA);
 				
 				AlertDialog.Builder builder = new AlertDialog.Builder(ActDBList.this);
 				builder
@@ -55,21 +56,26 @@ public class ActDBList extends Activity {
 								new DialogInterface.OnClickListener() {
 									@Override
 									public void onClick(DialogInterface dialog, int which) {
-										memoData.addMemoData(dbSelMemoData);
-										Toast.makeText(ActDBList.this, "추가 : " + dbSelMemoData, Toast.LENGTH_SHORT).show();
-										final String dbSelHistoryData = StringMgr.extTagData(dbSelData, MemoData.TAG_HISTORY);
+										// memo addMemoItem
+										memoData.parseAddMemoDataPack(dbSelMemoData);
+										//
+										// history addMemoItem
+										final String dbSelHistoryData = StringMgr.extTagDataDefText(dbSelData, MemoData.TAG_HISTORY);
 										memoData.addHistoryData(dbSelHistoryData);
-										memoData.loadFileMemoHistory();
 									}
 								})
 						.setNegativeButton("덮어쓰기",
 								new DialogInterface.OnClickListener() {
 									@Override
 									public void onClick(DialogInterface dialog, int which) {
-										FileMgr.saveFileText(memoData.saveFileFullPath, dbSelMemoData, FileMgr.ENC_UTF8, false);
-										final String dbSelHistoryData = StringMgr.extTagData(dbSelData, MemoData.TAG_HISTORY);
+										// memo overwrite
+										memoData.memoDataClear();
+										memoData.parseAddMemoDataPack(dbSelMemoData);
+										//
+										// history overwrite
+										memoData.historyClear();
+										final String dbSelHistoryData = StringMgr.extTagDataDefText(dbSelData, MemoData.TAG_HISTORY);
 										memoData.addHistoryData(dbSelHistoryData);
-										memoData.loadByFile();
 										finish();
 										return;
 									}
@@ -99,7 +105,7 @@ public class ActDBList extends Activity {
 
 				AlertDialog.Builder builder = new AlertDialog.Builder(ActDBList.this);
 				builder
-						.setMessage("삭제합니까?\n(삭제시 복구불가)→ " + getMemoData.split(MemoData.TAG_MEMO_END)[0].replaceAll(MemoData.TAG_MEMO_SPLITER, "\n") + " ←")
+						.setMessage("삭제합니까?\n(삭제시 복구불가)→ " + arrayAdapter.getItem(selPos).toString() + " ←")
 						.setCancelable(false)
 						.setPositiveButton("삭제함",
 								new DialogInterface.OnClickListener() {
@@ -141,17 +147,18 @@ public class ActDBList extends Activity {
 		ArrayList<String> dbList = (ArrayList<String>) mainArrayList.clone();
 
 		for (int i = 0; i < dbList.size(); i++) {
-			String[] memoList = StringMgr.extTagData(dbList.get(i), MemoData.TAG_MEMO_DATA).split(MemoData.TAG_MEMO_SPLITER);
-			String memo = "";
+			String[] dbIdAndData = dbList.get(i).split(":", 2);
+			String memo = dbIdAndData[0] + ":";
+			String[] memoList = StringMgr.extTagDataDefText(dbIdAndData[1], MemoData.TAG_MEMO_DATA).split(MemoData.TAG_MEMO_SPLITER);
 			for (int j = 0; j < memoList.length; j++) {
-				memo += memoList[j].split(MemoData.TAG_MEMO_END)[0] + "\n";
+				memo += memoList[j].split(MemoData.TAG_MEMO_END, 2)[0] + "\n";
 			}
 			if (memo.length() > 0) memo = memo.substring(0, memo.length() - 1);
 			// memo = memo.replaceAll(MemoData.TAG_MEMO_SPLITER, "");
 
 			dbList.set(i, memo);
 		}
-		ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.list_element, dbList);
+		arrayAdapter = new ArrayAdapter<String>(this, R.layout.list_element, dbList);
 		lvLoadList.setAdapter(arrayAdapter);
 		arrayAdapter.notifyDataSetChanged();
 	}

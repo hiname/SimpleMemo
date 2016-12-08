@@ -10,20 +10,23 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class ActNowMemo extends Activity {
 	private EditText editText1;
 	private MemoData memoData = MemoData.getInstance();
-	private TextView tvCreateDateTime, tvModifyDateTime, tvHistoryCount;
+	private TextView tvCreateDateTime, tvModifyDateTime;
+	private Button btnHistoryCount;
 
 	@Override
 	protected void onStart() {
 		super.onStart();
 		if (memoData.getNowMode().equals(MemoData.MODE_EDIT) || memoData.getNowMode().equals(MemoData.MODE_HISTORY_LIST)) {
 			editText1.setText(memoData.getNowSelectMemo());
-			tvHistoryCount.setText("내역갯수 : " + memoData.getNowSelectHistoryCount());
+			btnHistoryCount.setText("내역갯수 : " + memoData.getNowSelectHistoryCount());
+			btnHistoryCount.setVisibility(View.VISIBLE);
 		}
 	}
 
@@ -35,14 +38,14 @@ public class ActNowMemo extends Activity {
 		editText1.setSingleLine(false);
 		tvCreateDateTime = (TextView) findViewById(R.id.tvCreateDateTime);
 		tvModifyDateTime = (TextView) findViewById(R.id.tvModifyDateTime);
-		tvHistoryCount = (TextView) findViewById(R.id.tvHistoryCount);
+		btnHistoryCount = (Button) findViewById(R.id.btnHistoryCount);
 		// editText1.setSingleLine(false);
 		if (memoData.getNowMode().equals(MemoData.MODE_EDIT)) {
 			// editText1.setFocusable(true);
 			tvCreateDateTime.setText("만든시간 : " + memoData.getNowSelectCreateDateTime());
 			tvModifyDateTime.setText("수정시간 : " + memoData.getNowSelectModifyDateTime());
 			if (memoData.getNowSelectHistoryCount() > 0) {
-				tvHistoryCount.setOnClickListener(new View.OnClickListener() {
+				btnHistoryCount.setOnClickListener(new View.OnClickListener() {
 					@Override
 					public void onClick(View v) {
 						memoData.setNowMode(MemoData.MODE_HISTORY_LIST);
@@ -67,13 +70,13 @@ public class ActNowMemo extends Activity {
 			});
 		}
 
-		findViewById(R.id.btnSave).setOnClickListener(new View.OnClickListener() {
+		findViewById(R.id.llSave).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				setMemo();
 			}
 		});
-		findViewById(R.id.btnSaveAndFin).setOnClickListener(new View.OnClickListener() {
+		findViewById(R.id.llSaveAndFin).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				setMemo();
@@ -81,8 +84,8 @@ public class ActNowMemo extends Activity {
 			}
 		});
 
-		final Button btnSendDB = (Button) findViewById(R.id.btnSendDB);
-		btnSendDB.setOnClickListener(new View.OnClickListener() {
+		final LinearLayout llSendDB = (LinearLayout) findViewById(R.id.llSendDB);
+		llSendDB.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				final String inputStr = editText1.getText().toString();
@@ -91,7 +94,7 @@ public class ActNowMemo extends Activity {
 					@Override
 					protected void onPreExecute() {
 						super.onPreExecute();
-						btnSendDB.setEnabled(false);
+						llSendDB.setEnabled(false);
 					}
 
 					@Override
@@ -103,7 +106,7 @@ public class ActNowMemo extends Activity {
 					@Override
 					protected void onPostExecute(Void aVoid) {
 						super.onPostExecute(aVoid);
-						btnSendDB.setEnabled(true);
+						llSendDB.setEnabled(true);
 						Toast.makeText(ActNowMemo.this, "전송 됐습니다.\n→" + inputStr + "←", Toast.LENGTH_SHORT).show();
 					}
 				}.execute();

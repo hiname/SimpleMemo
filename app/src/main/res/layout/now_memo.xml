@@ -12,28 +12,30 @@
         android:id="@+id/linear1"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.8"
+        android:layout_weight="0.7"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/tvCreateDateTime"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.1" />
+            android:layout_weight="0.1"/>
 
         <TextView
             android:id="@+id/tvModifyDateTime"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="0.1"
-            android:textColor="@color/black" />
+            android:textColor="@color/black"/>
 
-        <TextView
-            android:id="@+id/tvHistoryCount"
+        <Button
+            android:id="@+id/btnHistoryCount"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="0.1"
-            android:textColor="@color/black" />
+            android:textColor="@color/black"
+            android:background="@drawable/history"
+            android:visibility="invisible"/>
 
         <EditText
             android:id="@+id/editText1"
@@ -44,7 +46,6 @@
             android:singleLine="false"
             android:textSize="24dp">
         </EditText>
-
     </LinearLayout>
 
     <LinearLayout
@@ -52,25 +53,79 @@
         android:layout_height="0dp"
         android:layout_weight="0.2">
 
-        <Button
-            android:id="@+id/btnSendDB"
+        <LinearLayout
+            android:id="@+id/llSendDB"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="메모전송"/>
+            android:orientation="vertical">
 
-        <Button
-            android:id="@+id/btnSave"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="저장하기"/>
+            <ImageView
+                android:id="@+id/ivSendDB"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.7"
+                android:background="@drawable/up_arrow"/>
 
-        <Button
-            android:id="@+id/btnSaveAndFin"
+            <TextView
+                android:id="@+id/tvSendDB"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.3"
+                android:gravity="center"
+                android:text="서버에\n메모전송"
+                android:textStyle="bold"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llSave"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="저장 및 종료하기"/>
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/ivSave"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.7"
+                android:background="@drawable/save_usb"/>
+
+            <TextView
+                android:id="@+id/tvSave"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.3"
+                android:gravity="center"
+                android:text="저장하기"
+                android:textStyle="bold"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llSaveAndFin"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/ivSaveAndFin"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.7"
+                android:background="@drawable/save_finish"/>
+
+            <TextView
+                android:id="@+id/tvSaveAndFin"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.3"
+                android:gravity="center"
+                android:text="저장 및 종료하기"
+                android:textStyle="bold"
+                />
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>

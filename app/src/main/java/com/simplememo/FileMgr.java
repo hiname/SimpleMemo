@@ -57,6 +57,10 @@ public class FileMgr {
 	static String ENC_UNICODE = "Unicode";
 	static String ENC_EUC_KR = "EUC_KR";
 
+	public static String[] loadFileTextArray(String filePath){
+		return loadFileTextArray(filePath, ENC_UTF8);
+	}
+
 	/**
 	 *
 	 * @param filePath
