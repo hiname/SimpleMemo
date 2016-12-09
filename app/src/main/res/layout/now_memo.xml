@@ -28,14 +28,30 @@
             android:layout_weight="0.1"
             android:textColor="@color/black"/>
 
-        <Button
-            android:id="@+id/btnHistoryCount"
+        <FrameLayout
+            android:id="@+id/flHistoryCount"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="0.1"
-            android:textColor="@color/black"
-            android:background="@drawable/history"
-            android:visibility="invisible"/>
+            android:background="@drawable/border"
+            android:visibility="invisible">
+
+            <ImageView
+                android:id="@+id/ivHistoryCount"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.1"
+                android:src="@drawable/history"
+                />
+
+            <TextView
+                android:id="@+id/tvHistoryCount"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textColor="@color/black"
+                android:gravity="center"
+                />
+        </FrameLayout>
 
         <EditText
             android:id="@+id/editText1"
@@ -65,7 +81,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="0.7"
-                android:background="@drawable/up_arrow"/>
+                android:src="@drawable/up_arrow"
+                />
 
             <TextView
                 android:id="@+id/tvSendDB"
@@ -90,7 +107,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="0.7"
-                android:background="@drawable/save_usb"/>
+                android:src="@drawable/save_usb"/>
 
             <TextView
                 android:id="@+id/tvSave"
@@ -115,7 +132,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="0.7"
-                android:background="@drawable/save_finish"/>
+                android:src="@drawable/save_finish"/>
 
             <TextView
                 android:id="@+id/tvSaveAndFin"

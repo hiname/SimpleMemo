@@ -1,26 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="fill_parent"
-              android:layout_height="fill_parent"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
               android:orientation="vertical">
 
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="aaa"
-        android:textSize="20sp"/>
-
-    <CheckBox
-        android:id="@+id/checkBoxFastscroll"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="FastScroll Enabled"/>
-
-    <ListView
-        android:id="@+id/listView1"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scrollbarStyle="outsideOverlay"
+    <ImageView
+        android:id="@+id/ivSendDB"
+        android:layout_width="100dp"
+        android:layout_height="500dp"
+        android:src="@drawable/restore"
+        android:scaleType="fitStart"
         />
 </LinearLayout>

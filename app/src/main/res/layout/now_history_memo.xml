@@ -29,7 +29,7 @@
             android:textColor="@color/black"/>
 
         <TextView
-            android:id="@+id/btnHistoryCount"
+            android:id="@+id/ivHistoryCount"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="0.1"
@@ -56,15 +56,16 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:background="@drawable/border">
 
             <ImageView
                 android:id="@+id/ivRestore"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="0.7"
-                android:background="@drawable/restore"
-                android:scaleType="centerCrop"/>
+                android:src="@drawable/restore"
+                />
 
             <TextView
                 android:layout_width="match_parent"

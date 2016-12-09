@@ -25,8 +25,8 @@ public class ActNowHistoryMemo extends Activity{
 
 		editText1 = (EditText) findViewById(R.id.editText1);
 		editText1.setText(memoData.getNowHistoryItem().split(MemoData.TAG_MEMO_END)[0]);
-		LinearLayout ivRestore = (LinearLayout) findViewById(R.id.llRestore);
-		ivRestore.setOnClickListener(new View.OnClickListener() {
+		LinearLayout llRestore = (LinearLayout) findViewById(R.id.llRestore);
+		llRestore.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				Debug.d("복원하기");

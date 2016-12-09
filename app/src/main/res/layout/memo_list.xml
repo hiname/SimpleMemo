@@ -31,7 +31,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="0.7"
-                android:background="@drawable/up_arrow"
+                android:src="@drawable/up_arrow"
                 android:scaleType="fitCenter"
                 />
 
@@ -57,7 +57,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="0.7"
-                android:background="@drawable/down_arrow"
+                android:src="@drawable/down_arrow"
                 />
 
             <TextView
@@ -82,7 +82,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="0.7"
-                android:background="@drawable/fast_memo_icon"
+                android:src="@drawable/fast_memo_icon"
                 />
 
             <TextView

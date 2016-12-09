@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -108,6 +109,12 @@ public class ActMemoList extends Activity implements ListUpdate{
 
 		reloadList();
 
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+
+		return super.onCreateOptionsMenu(menu);
 	}
 
 	@Override

@@ -17,5 +17,6 @@ public class ActMain extends Activity {
 		super.onCreate(savedInstanceState);
 		startActivity(new Intent(this, ActMemoList.class));
 		finish();
+		// setContentView(R.layout.activity_act_main);
 	}
 }
