@@ -18,5 +18,9 @@ public class ActMain extends Activity {
 		startActivity(new Intent(this, ActMemoList.class));
 		finish();
 		// setContentView(R.layout.activity_act_main);
+
+		// startActivity(new Intent(this, ActLicense.class));
+		// finish();
+
 	}
 }

@@ -72,5 +72,6 @@
         <activity android:name=".ActDBList"/>
         <activity android:name=".ActHistoryList"/>
         <activity android:name=".ActNowHistoryMemo"/>
+        <activity android:name=".ActLicense"/>
     </application>
 </manifest>
