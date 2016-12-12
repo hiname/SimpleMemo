@@ -21,6 +21,6 @@ public class ActMain extends Activity {
 
 		// startActivity(new Intent(this, ActLicense.class));
 		// finish();
-
+		// 12-12
 	}
 }
